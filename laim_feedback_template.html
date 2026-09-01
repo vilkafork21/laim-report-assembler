@@ -28,7 +28,6 @@
 
   --tl-green: #16A34A;
   --tl-yellow: #EAB308;
-  --tl-gray: #94A3B8;
   --tl-red: #DC2626;
 
   --bg: #F4F6F8;
@@ -296,148 +295,6 @@ html, body {
   font-style: italic;
 }
 
-/* ============= TRAFFIC LIGHT ============= */
-.tl-row {
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 32px;
-  align-items: start;
-}
-.tl-integral {
-  background: var(--surface-alt);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 22px;
-  text-align: center;
-}
-.tl-integral .label {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--text-muted);
-  font-weight: 600;
-  margin-bottom: 14px;
-}
-.tl-circle {
-  width: 88px; height: 88px;
-  border-radius: 50%;
-  margin: 0 auto 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  box-shadow: inset 0 -6px 16px rgba(0,0,0,0.10);
-}
-.tl-circle::before {
-  content: '';
-  position: absolute;
-  inset: 8px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.18);
-}
-.tl-circle.green { background: var(--tl-green); }
-.tl-circle.yellow { background: var(--tl-yellow); }
-.tl-circle.gray { background: var(--tl-gray); }
-.tl-circle.red { background: var(--tl-red); }
-.tl-circle.empty {
-  background: var(--surface);
-  border: 2px dashed var(--border-strong);
-  box-shadow: none;
-}
-.tl-zone-name {
-  font-family: var(--font-display);
-  font-size: 17px;
-  font-weight: 600;
-  color: var(--text);
-}
-.tl-zone-desc {
-  font-size: 12px;
-  color: var(--text-muted);
-  margin-top: 4px;
-}
-
-.tl-timeline {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.tl-timeline-label {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--text-muted);
-  font-weight: 600;
-}
-.tl-strip {
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
-  align-items: flex-start;
-}
-.tl-day {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex: 1;
-  min-width: 56px;
-  cursor: default;
-}
-.tl-day-square {
-  width: 100%;
-  aspect-ratio: 1;
-  max-height: 56px;
-  border-radius: var(--radius-sm);
-  position: relative;
-  margin-bottom: 6px;
-  transition: transform 0.15s;
-}
-.tl-day:hover .tl-day-square {
-  transform: scale(1.05);
-}
-.tl-day-square.green { background: var(--tl-green); }
-.tl-day-square.yellow { background: var(--tl-yellow); }
-.tl-day-square.gray { background: var(--tl-gray); }
-.tl-day-square.red { background: var(--tl-red); }
-.tl-day-square.empty {
-  background: var(--surface);
-  border: 1px dashed var(--border-strong);
-}
-.tl-day-date {
-  font-size: 10px;
-  color: var(--text-muted);
-  font-family: var(--font-mono);
-  text-align: center;
-  line-height: 1.2;
-}
-.tl-day-date strong {
-  display: block;
-  font-size: 12px;
-  color: var(--text);
-  font-family: var(--font-body);
-  font-weight: 600;
-}
-.tl-legend {
-  display: flex;
-  gap: 20px;
-  margin-top: 8px;
-  flex-wrap: wrap;
-}
-.tl-legend-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  color: var(--text-muted);
-}
-.tl-legend-dot {
-  width: 10px; height: 10px;
-  border-radius: 2px;
-}
-.tl-legend-dot.green { background: var(--tl-green); }
-.tl-legend-dot.yellow { background: var(--tl-yellow); }
-.tl-legend-dot.gray { background: var(--tl-gray); }
-.tl-legend-dot.red { background: var(--tl-red); }
-
 /* ============= IMPORT BAR ============= */
 .import-bar {
   display: flex;
@@ -591,18 +448,13 @@ html, body {
   border-radius: 50%;
   background: currentColor;
 }
-/* Группа 1 — Детектор аномалий (тёплая палитра) */
+/* Типы аномалий детектора */
 .anomaly-type-badge.hallucination       { background: #FFF4E6; color: #B85B00; }
 .anomaly-type-badge.bias                { background: #F3E8F0; color: #8B3A6B; }
 .anomaly-type-badge.prompt_injection_dpi { background: #FCE7E7; color: #B91C1C; }
 .anomaly-type-badge.prompt_injection_ipi { background: #FBD5D5; color: #991B1B; }
 .anomaly-type-badge.memory_poisoning    { background: #EDE8F5; color: #5E3D8E; }
-/* Группа 2 — Автоасессор / КМ (синий) */
-.anomaly-type-badge.quality_degradation { background: #E6F1FA; color: #185FA5; }
-/* Группа 3 — Дата-дрифт (прохладная палитра) */
-.anomaly-type-badge.drift_oos_oot       { background: #E6F4EE; color: #0F7A5A; }
-.anomaly-type-badge.drift_local         { background: #EFF4E5; color: #5B7700; }
-.anomaly-type-badge.drift_global        { background: #E8EDF1; color: #475569; }
+.anomaly-type-badge.anomaly             { background: #EEF1F4; color: #475569; }
 
 .anomaly-status {
   font-size: 11px;
@@ -1287,7 +1139,6 @@ html, body {
   .summary-grid { grid-template-columns: repeat(2, 1fr); }
   .anomaly-details { grid-template-columns: 1fr; }
   .markup-grid { grid-template-columns: 1fr; }
-  .tl-row { grid-template-columns: 1fr; }
 }
 @media (max-width: 640px) {
   .page { padding: 16px 12px 140px 12px; }
@@ -1548,211 +1399,6 @@ html, body {
   /* keep the 'i' visible while tooltip is up */
 }
 
-/* DRIFT card variant — simpler body (no dialogue / RCA) */
-
-/* anomaly head: 5 columns now (number, id-block, type, confidence, status) */
-
-.drift-block-header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin: 0 0 12px;
-  padding-bottom: 10px;
-  border-bottom: 1px dashed var(--border);
-}
-.drift-block-title {
-  font-family: var(--font-display);
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.drift-block-title::before {
-  content: '';
-  width: 8px; height: 8px;
-  border-radius: 2px;
-  background: var(--teal);
-}
-.drift-block-header.km-block .drift-block-title::before { background: var(--blue); }
-.drift-block-header.anomalies-block-header .drift-block-title::before { background: #B85B00; }
-.drift-block-subtitle {
-  font-size: 12px;
-  color: var(--text-muted);
-}
-.anomalies-block {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  margin-bottom: 24px;
-}
-.anomalies-block:last-child { margin-bottom: 0; }
-
-/* ============= KM DYNAMICS CHART ============= */
-/* legacy; kept for back-compat if needed */
-.km-chart-card {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  background: var(--surface);
-  padding: 18px 20px 16px;
-}
-/* embedded inside the anomaly-card body */
-.km-chart-block {
-  background: var(--surface-alt);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 14px 16px 12px;
-  margin-top: 2px;
-}
-/* synthetic KM card visually softer (no border-left strong colour for unmarked) */
-.anomaly-card.km-card.unmarked.km-synthetic {
-  border-left-color: var(--blue);
-}
-.km-legend {
-  display: flex;
-  gap: 24px;
-  margin-bottom: 8px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-.km-legend-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  color: var(--text);
-  font-weight: 500;
-}
-.km-legend-line {
-  width: 22px; height: 2px;
-  border-radius: 2px;
-  flex-shrink: 0;
-}
-.km-legend-line.km { background: var(--teal); }
-.km-legend-line.assessor {
-  background: transparent;
-  border-top: 1.3px dashed #9CA3AF;
-}
-.km-legend-line.threshold {
-  background: transparent;
-  border-top: 1.5px dashed var(--text-light);
-}
-.km-legend-zone {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 11px;
-  color: var(--text-muted);
-  font-weight: 500;
-  padding: 2px 8px;
-  border-radius: 999px;
-}
-.km-legend-zone-dot {
-  width: 8px; height: 8px;
-  border-radius: 2px;
-  flex-shrink: 0;
-}
-.km-legend-zone.green .km-legend-zone-dot  { background: var(--tl-green); }
-.km-legend-zone.yellow .km-legend-zone-dot { background: var(--tl-yellow); }
-.km-legend-zone.red .km-legend-zone-dot    { background: var(--tl-red); }
-
-.km-legend-stat {
-  margin-left: auto;
-  display: flex;
-  gap: 18px;
-  font-size: 11px;
-  color: var(--text-muted);
-}
-.km-legend-stat-item {
-  display: flex;
-  flex-direction: column;
-}
-.km-legend-stat-label {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-weight: 600;
-}
-.km-legend-stat-value {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text);
-}
-.km-legend-stat-value.up { color: var(--tl-green); }
-.km-legend-stat-value.down { color: var(--tl-red); }
-
-.km-chart-svg {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 900 / 280;
-  font-family: var(--font-body);
-}
-
-.km-thresholds-info {
-  margin-top: 10px;
-  padding: 9px 12px;
-  background: var(--surface-alt);
-  border-radius: var(--radius-sm);
-  border-left: 3px solid var(--border-strong);
-  font-size: 11px;
-  color: var(--text-muted);
-  line-height: 1.5;
-}
-.km-thresholds-info strong { color: var(--text); font-weight: 600; }
-
-.km-zone-strip {
-  margin: 12px 0 0;
-}
-.km-zone-strip-label {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.10em;
-  color: var(--text-muted);
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-.km-zone-row {
-  display: grid;
-  gap: 4px;
-}
-.km-zone-cell {
-  height: 6px;
-  border-radius: 2px;
-}
-.km-zone-cell.green  { background: var(--tl-green); }
-.km-zone-cell.yellow { background: var(--tl-yellow); }
-.km-zone-cell.gray   { background: var(--tl-gray); }
-.km-zone-cell.red    { background: var(--tl-red); }
-.km-zone-cell.empty  { background: var(--surface); border: 1px dashed var(--border-strong); }
-
-/* group subhead inside summary section */
-.summary-group-subhead {
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text);
-  letter-spacing: -0.005em;
-  margin: 22px 0 12px;
-  padding-bottom: 6px;
-  border-bottom: 1px dashed var(--border);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.summary-group-subhead::before {
-  content: '';
-  width: 8px; height: 8px;
-  border-radius: 2px;
-  background: var(--text-muted);
-}
-.summary-group-subhead.km-group::before    { background: var(--blue); }
-.summary-group-subhead.drift-group::before { background: var(--teal); }
-.summary-group-subhead.det-group::before   { background: #B85B00; }
-.summary-group-subhead:first-of-type { margin-top: 4px; }
-
 @media (max-width: 1024px) {
   .guide-grid { grid-template-columns: repeat(2, 1fr); }
   .guide-conf-scale { grid-template-columns: 1fr; }
@@ -1843,43 +1489,13 @@ html, body {
         <div class="guide-card-desc">Утечка или искажение контекста: агент использовал данные из чужой сессии или содержимое его памяти было «отравлено» предыдущими взаимодействиями.</div>
         <div class="guide-card-example">в ответ клиенту попали детали чужой заявки на кредит с конкретной суммой.</div>
       </div>
-    </div>
 
-    <div class="guide-subhead">Динамика ключевой метрики</div>
-    <div class="guide-grid">
-      <div class="guide-card assessor">
+      <div class="guide-card detector">
         <div class="guide-card-head">
-          <span class="anomaly-type-badge quality_degradation">Деградация КМ</span>
+          <span class="anomaly-type-badge anomaly">Аномалия без классификации</span>
         </div>
-        <div class="guide-card-desc">Оценка динамики ключевой метрики на основе разметки, сформированной из трейсов тестовой корзины Автоасессором (LLM-as-a-Judge).</div>
-        <div class="guide-card-example">KM по агенту снизилась с 0.89 до 0.74 за неделю — 15 п.п.</div>
-      </div>
-    </div>
-
-    <div class="guide-subhead">Тесты на дата-дрифт</div>
-    <div class="guide-grid">
-      <div class="guide-card drift">
-        <div class="guide-card-head">
-          <span class="anomaly-type-badge drift_oos_oot">Дата-дрифт · OOS-OOT</span>
-        </div>
-        <div class="guide-card-desc">Сдвиг распределения признаков на out-of-sample / out-of-time выборке относительно baseline-периода. Сигнализирует, что вход агента «уехал» во времени.</div>
-        <div class="guide-card-example">за неделю изменились длина сессий, языковой состав и распределение интентов одновременно.</div>
-      </div>
-
-      <div class="guide-card drift">
-        <div class="guide-card-head">
-          <span class="anomaly-type-badge drift_local">Дата-дрифт · локальный</span>
-        </div>
-        <div class="guide-card-desc">Дрифт зафиксирован только в отдельной подгруппе клиентов или сценариев — на глобальном уровне распределение стабильно.</div>
-        <div class="guide-card-example">в подвыборке МСБ-клиентов сместилось распределение сложности входящих запросов.</div>
-      </div>
-
-      <div class="guide-card drift">
-        <div class="guide-card-head">
-          <span class="anomaly-type-badge drift_global">Дата-дрифт · глобальный</span>
-        </div>
-        <div class="guide-card-desc">Сдвиг распределения целевого score по всей популяции пользователей. Может быть ранним сигналом начинающейся деградации.</div>
-        <div class="guide-card-example">за месяц распределение типов запросов сместилось — клиенты стали реже спрашивать про ипотеку и чаще про автокредиты.</div>
+        <div class="guide-card-desc">Детектор зафиксировал отклонение трейса от нормы, но тип аномалии не определён. Разметка Владельца по таким записям особенно важна.</div>
+        <div class="guide-card-example">реконструкция трейса ушла за порог, при этом ни один из типов выше не подтверждён.</div>
       </div>
     </div>
 
@@ -1959,41 +1575,11 @@ html, body {
   </div>
 </section>
 
-<!-- ============= 02 · TRAFFIC LIGHT ============= -->
-<section class="section">
-  <div class="section-head">
-    <h2>Светофор за период</h2>
-    <span class="section-num">02</span>
-  </div>
-  <div class="tl-row">
-    <div class="tl-integral">
-      <div class="label">Интегральная зона</div>
-      <div class="tl-circle empty" id="tl-integral-circle">
-        <span style="color:#9CA3AF;font-size:24px;">—</span>
-      </div>
-      <div class="tl-zone-name" id="tl-integral-name">не определена</div>
-      <div class="tl-zone-desc" id="tl-integral-desc">импортируйте данные</div>
-    </div>
-    <div class="tl-timeline">
-      <div class="tl-timeline-label">Динамика по запускам</div>
-      <div class="tl-strip" id="tl-strip">
-        <div class="tl-day"><div class="tl-day-square empty"></div><div class="tl-day-date">—</div></div>
-      </div>
-      <div class="tl-legend">
-        <div class="tl-legend-item"><span class="tl-legend-dot green"></span>OK · стабильно</div>
-        <div class="tl-legend-item"><span class="tl-legend-dot yellow"></span>Внимание</div>
-        <div class="tl-legend-item"><span class="tl-legend-dot gray"></span>Серая зона · низкая точность</div>
-        <div class="tl-legend-item"><span class="tl-legend-dot red"></span>Деградация</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============= 03 · GENERAL COMMENT ============= -->
+<!-- ============= 02 · GENERAL COMMENT ============= -->
 <section class="section">
   <div class="section-head">
     <h2>Общая оценка работы агента за период</h2>
-    <span class="section-num">03</span>
+    <span class="section-num">02</span>
   </div>
   <div class="field full">
     <label for="general_comment">Комментарий Владельца — опционально</label>
@@ -2001,11 +1587,11 @@ html, body {
   </div>
 </section>
 
-<!-- ============= 04 · ANOMALIES ============= -->
+<!-- ============= 03 · ANOMALIES ============= -->
 <section class="section">
   <div class="section-head">
     <h2>Разметка аномалий</h2>
-    <span class="section-num">04</span>
+    <span class="section-num">03</span>
   </div>
 
   <div class="import-bar">
@@ -2062,11 +1648,11 @@ html, body {
   </div>
 </section>
 
-<!-- ============= 05 · SUMMARY ============= -->
+<!-- ============= 04 · SUMMARY ============= -->
 <section class="section" id="summary-section">
   <div class="section-head">
     <h2>Сводка по разметке</h2>
-    <span class="section-num">05</span>
+    <span class="section-num">04</span>
   </div>
   <div class="summary-grid">
     <div class="summary-stat">
@@ -2091,53 +1677,6 @@ html, body {
     </div>
   </div>
 
-  <!-- ▼ группировка по разделам ▼ -->
-
-  <div class="summary-group-subhead km-group">Динамика ключевой метрики</div>
-  <div class="summary-grid" id="km-summary-grid">
-    <div class="summary-stat">
-      <div class="summary-stat-label">KM ср. за период</div>
-      <div class="summary-stat-value" id="km-stat-avg">—</div>
-      <div class="summary-stat-sub" id="km-stat-baseline">baseline —</div>
-    </div>
-    <div class="summary-stat">
-      <div class="summary-stat-label">Δ KM (конец − начало)</div>
-      <div class="summary-stat-value" id="km-stat-delta">—</div>
-      <div class="summary-stat-sub" id="km-stat-zone">— зона</div>
-    </div>
-    <div class="summary-stat">
-      <div class="summary-stat-label">Точность Автоасессора ср.</div>
-      <div class="summary-stat-value" id="km-stat-acc">—</div>
-      <div class="summary-stat-sub" id="km-stat-acc-sub">за период</div>
-    </div>
-    <div class="summary-stat">
-      <div class="summary-stat-label">События деградации КМ</div>
-      <div class="summary-stat-value" id="km-stat-events">0</div>
-      <div class="summary-stat-sub" id="km-stat-events-sub">в импорте</div>
-    </div>
-  </div>
-  <div class="dist-section" style="margin-top: 14px;">
-    <div class="dist-title">Статус разметки событий деградации</div>
-    <div class="dist-bars" id="dist-km-status">
-      <div style="font-size:12px;color:var(--text-light);font-style:italic">нет данных</div>
-    </div>
-  </div>
-
-  <div class="summary-group-subhead drift-group">Дата-дрифт</div>
-  <div class="dist-section">
-    <div class="dist-title">Распределение по типам дрифта</div>
-    <div class="dist-bars" id="dist-drift-type">
-      <div style="font-size:12px;color:var(--text-light);font-style:italic">нет данных</div>
-    </div>
-  </div>
-  <div class="dist-section">
-    <div class="dist-title">Статус разметки дрифт-событий</div>
-    <div class="dist-bars" id="dist-drift-status">
-      <div style="font-size:12px;color:var(--text-light);font-style:italic">нет данных</div>
-    </div>
-  </div>
-
-  <div class="summary-group-subhead det-group">Аномалии</div>
   <div class="dist-section">
     <div class="dist-title">Распределение по типам аномалий</div>
     <div class="dist-bars" id="dist-anom-type">
@@ -2211,30 +1750,15 @@ html, body {
 // LAIM · Feedback template — application logic
 // =========================================================================
 
-// Таксономия аномалий (3 группы):
-//   1) Детектор аномалий (LSTM-AE) с подтипами
-//   2) Автоасессор / Деградация ключевых метрик
-//   3) Тесты на дата-дрифт (3 типа)
+// Типы аномалий детектора; 'anomaly' — запись, которую детектор не классифицировал.
 const ANOMALY_TYPE_LABELS = {
-  // Группа 1 — Детектор аномалий
   hallucination:        'Галлюцинация',
   bias:                 'Bias / предвзятость',
   prompt_injection_dpi: 'Prompt Injection · DPI',
   prompt_injection_ipi: 'Prompt Injection · IPI',
   memory_poisoning:     'Memory Poisoning',
-  // Группа 2 — Автоасессор
-  quality_degradation:  'Деградация КМ',
-  // Группа 3 — Дата-дрифт
-  drift_oos_oot:        'Дата-дрифт · OOS-OOT',
-  drift_local:          'Дата-дрифт · локальный',
-  drift_global:         'Дата-дрифт · глобальный'
+  anomaly:              'Аномалия без классификации'
 };
-
-const ANOMALY_TYPE_GROUPS = [
-  { name: 'Детектор аномалий', types: ['hallucination', 'bias', 'prompt_injection_dpi', 'prompt_injection_ipi', 'memory_poisoning'] },
-  { name: 'Автоасессор',    types: ['quality_degradation'] },
-  { name: 'Дата-дрифт',       types: ['drift_oos_oot', 'drift_local', 'drift_global'] }
-];
 
 const SEVERITY_LABELS = {
   low: 'Низкая',
@@ -2248,13 +1772,6 @@ const STATUS_LABELS = {
   rejected: 'Отклонено',
   uncertain: 'Требует доисследования',
   unmarked: 'Не размечено'
-};
-
-const ZONE_INFO = {
-  green:  { name: 'Зелёная',  desc: 'агент работает стабильно' },
-  yellow: { name: 'Жёлтая',   desc: 'требует внимания' },
-  gray:   { name: 'Серая',    desc: 'низкая точность детектора' },
-  red:    { name: 'Красная',  desc: 'деградация качества' }
 };
 
 // ---------- application state ----------
@@ -2271,9 +1788,6 @@ const state = {
     pilot_stage: 'Pilot'
   },
   general_comment: '',
-  timeline: [],         // [{date: 'YYYY-MM-DD', zone: 'green'|'yellow'|'gray'|'red'}]
-  // KM dynamics: { baseline, thresholds: {yellow_pp, red_pp}, series: [{date, km, assessor_accuracy}] }
-  km_dynamics: null,
   anomalies: [],        // see schema below
   filter: { text: '', type: '', status: '', sort: 'time-desc' }
 };
@@ -2281,13 +1795,13 @@ const state = {
 /* anomaly schema:
 {
   id: 'a1',                       // local row id
-  trace_id: 'trc-...',            // from system (omitted for drift)
+  trace_id: 'trc-...',            // from system
   starttime: ISO string,          // from system
   endtime:   ISO string,          // from system
   anomaly_type: 'hallucination',  // from system (predicted)
   confidence: 0..100,             // from system — % уверенности в аномалии
   tech_details: 'string',         // from system
-  rca_results: 'string',          // from system (omitted for drift)
+  rca_results: 'string',          // from system
   // owner markup:
   is_anomaly: 'confirmed'|'rejected'|'uncertain'|'',
   severity: 'low'|'medium'|'high'|'critical'|'',
@@ -2348,7 +1862,6 @@ document.addEventListener('DOMContentLoaded', () => {
   hydrateFromEmbeddedState();
 
   // initial render
-  renderTimeline();
   renderAnomalies();
   renderSummary();
 });
@@ -2381,76 +1894,17 @@ function showToast(msg, type = 'info') {
 }
 
 // =========================================================================
-// TIMELINE RENDERING + INTEGRAL ZONE
-// =========================================================================
-function renderTimeline() {
-  const strip = document.getElementById('tl-strip');
-  if (!state.timeline || state.timeline.length === 0) {
-    strip.innerHTML = '<div class="tl-day"><div class="tl-day-square empty"></div><div class="tl-day-date">нет&nbsp;данных</div></div>';
-    setIntegralZone(null);
-    return;
-  }
-
-  strip.innerHTML = state.timeline.map(d => {
-    const dateObj = new Date(d.date);
-    const dayNum = dateObj.getDate();
-    const monthShort = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'][dateObj.getMonth()];
-    const zone = d.zone || 'empty';
-    const zoneTitle = d.zone ? `${ZONE_INFO[d.zone]?.name || ''} — ${ZONE_INFO[d.zone]?.desc || ''}` : 'нет данных';
-    return `
-      <div class="tl-day" title="${escapeHtml(d.date + ' · ' + zoneTitle)}">
-        <div class="tl-day-square ${zone}"></div>
-        <div class="tl-day-date"><strong>${dayNum}</strong>${monthShort}</div>
-      </div>
-    `;
-  }).join('');
-
-  setIntegralZone(computeIntegralZone());
-}
-
-function computeIntegralZone() {
-  const counts = { red: 0, yellow: 0, gray: 0, green: 0 };
-  state.timeline.forEach(d => { if (d.zone && counts[d.zone] !== undefined) counts[d.zone]++; });
-  // priority: any red → red; else mostly yellow → yellow; else mostly gray → gray; else green
-  if (counts.red > 0) return 'red';
-  const total = counts.green + counts.yellow + counts.gray;
-  if (total === 0) return null;
-  if (counts.yellow >= total * 0.3) return 'yellow';
-  if (counts.gray >= total * 0.5) return 'gray';
-  return 'green';
-}
-
-function setIntegralZone(zone) {
-  const circle = document.getElementById('tl-integral-circle');
-  const name = document.getElementById('tl-integral-name');
-  const desc = document.getElementById('tl-integral-desc');
-  circle.className = 'tl-circle ' + (zone || 'empty');
-  if (!zone) {
-    circle.innerHTML = '<span style="color:#9CA3AF;font-size:24px;">—</span>';
-    name.textContent = 'не определена';
-    desc.textContent = 'импортируйте данные';
-  } else {
-    circle.innerHTML = '';
-    name.textContent = ZONE_INFO[zone].name;
-    desc.textContent = ZONE_INFO[zone].desc;
-  }
-}
-
-// =========================================================================
 // ANOMALIES RENDERING
 // =========================================================================
 function renderAnomalies() {
   const container = document.getElementById('anomaly-list');
   const filtersBar = document.getElementById('filters');
 
-  const hasKm = !!(state.km_dynamics && Array.isArray(state.km_dynamics.series) && state.km_dynamics.series.length);
-  const hasAnomalies = state.anomalies.length > 0;
-
-  if (!hasKm && !hasAnomalies) {
+  if (state.anomalies.length === 0) {
     filtersBar.style.display = 'none';
     container.innerHTML = `
       <div class="empty-state">
-        <div class="empty-state-icon">⊘</div>
+        <div class="empty-state-icon">∅</div>
         <h3>Аномалии не загружены</h3>
         <p>Импортируйте JSON/CSV-файл с аномалиями из системы или загрузите демо-данные, чтобы попробовать шаблон.</p>
       </div>`;
@@ -2458,8 +1912,8 @@ function renderAnomalies() {
     return;
   }
 
-  filtersBar.style.display = hasAnomalies ? 'flex' : 'none';
-  if (hasAnomalies) populateTypeFilter();
+  filtersBar.style.display = 'flex';
+  populateTypeFilter();
 
   // Apply filters
   let rows = state.anomalies.slice();
@@ -2495,51 +1949,7 @@ function renderAnomalies() {
       break;
   }
 
-  // Split into 3 groups
-  const driftSet = new Set(['drift_oos_oot', 'drift_local', 'drift_global']);
-  const kmSet = new Set(['quality_degradation']);
-  const driftRows = rows.filter(r => driftSet.has(r.anomaly_type));
-  const kmRows = rows.filter(r => kmSet.has(r.anomaly_type));
-  const otherRows = rows.filter(r => !driftSet.has(r.anomaly_type) && !kmSet.has(r.anomaly_type));
-
-  // ----- Block visibility logic -----
-  // The KM block contains: chart + (qd cards OR synthetic card).
-  // It must respect the same filters as the other blocks.
-  const fType = state.filter.type;
-  const fStatus = state.filter.status;
-  const fText = state.filter.text;
-
-  const kmTypeAllowed    = !fType || fType === 'quality_degradation';
-  const driftTypeAllowed = !fType || driftSet.has(fType);
-  const anomTypeAllowed  = !fType || (!driftSet.has(fType) && fType !== 'quality_degradation');
-
-  // Decide whether to show the KM block (which may render either qd cards or a synthetic card)
-  let showKm = hasKm && kmTypeAllowed;
-  let renderSyntheticKm = false;
-  if (showKm) {
-    if (kmRows.length === 0) {
-      // would render synthetic card — verify it passes status/text filters too
-      const km = state.km_dynamics;
-      const syntheticStatus = (km && km.markup && km.markup.is_anomaly) || 'unmarked';
-      let synthPasses = true;
-      if (fStatus && syntheticStatus !== fStatus) synthPasses = false;
-      if (synthPasses && fText) {
-        const haystack = (generateKmDescription(km) + ' ' + generateKmTechDetails(km)).toLowerCase();
-        if (!haystack.includes(fText)) synthPasses = false;
-      }
-      if (!synthPasses) {
-        showKm = false;
-      } else {
-        renderSyntheticKm = true;
-      }
-    }
-  }
-
-  const showDrift = driftRows.length > 0 && driftTypeAllowed;
-  const showAnom  = otherRows.length > 0 && anomTypeAllowed;
-
-  // Empty state — all blocks hidden
-  if (!showKm && !showDrift && !showAnom) {
+  if (rows.length === 0) {
     container.innerHTML = `
       <div class="empty-state">
         <div class="empty-state-icon">∅</div>
@@ -2550,549 +1960,31 @@ function renderAnomalies() {
     return;
   }
 
-  let html = '';
-
-  // Block 1 — KM dynamics
-  if (showKm) {
-    // Pass an empty array if we're rendering the synthetic card; pass kmRows otherwise.
-    html += renderKmDynamicsBlock(renderSyntheticKm ? [] : kmRows);
-  }
-
-  // Block 2 — drift
-  if (showDrift) {
-    html += `
-      <div class="anomalies-block">
-        <div class="drift-block-header">
-          <div class="drift-block-title">Результаты тестов на дата-дрифт</div>
-          <div class="drift-block-subtitle">${driftRows.length} ${pluralAnomalies(driftRows.length)} · сдвиги распределения признаков</div>
-        </div>
-        ${driftRows.map((r, idx) => renderAnomalyCard(r, idx, true)).join('')}
-      </div>
-    `;
-  }
-
-  // Block 3 — detector anomalies
-  if (showAnom) {
-    html += `
-      <div class="anomalies-block">
-        <div class="drift-block-header anomalies-block-header">
-          <div class="drift-block-title">Аномалии</div>
-          <div class="drift-block-subtitle">${otherRows.length} ${pluralAnomalies(otherRows.length)} · срабатывания детектора</div>
-        </div>
-        ${otherRows.map((r, idx) => renderAnomalyCard(r, idx, false)).join('')}
-      </div>
-    `;
-  }
-
-  container.innerHTML = html;
+  container.innerHTML = rows.map((r, idx) => renderAnomalyCard(r, idx)).join('');
 
   // bind events
   bindAnomalyEvents();
   renderSummary();
 }
 
-function pluralAnomalies(n) {
-  const m100 = n % 100;
-  if (m100 >= 11 && m100 <= 14) return 'аномалий';
-  const m10 = n % 10;
-  if (m10 === 1) return 'аномалия';
-  if (m10 >= 2 && m10 <= 4) return 'аномалии';
-  return 'аномалий';
-}
-
-// ===== KM DYNAMICS BLOCK =====
-// Composition mirrors drift block: header + cards (anomaly-card style) with markup.
-// The chart is rendered inside the body of the primary card. Each quality_degradation
-// event (if any in state.anomalies) becomes a card in this block; otherwise a
-// synthetic period card is generated to host the chart.
-function renderKmDynamicsBlock(qdRows) {
-  const km = state.km_dynamics;
-
-  // pick primary card target: first qd event or a synthetic one
-  const cards = (qdRows && qdRows.length) ? qdRows.slice() : [makeSyntheticKmCard()];
-  // chart goes in the body of the FIRST card only
-  const cardsHtml = cards.map((r, idx) => renderKmCard(r, idx, idx === 0)).join('');
-
-  const subtitleParts = [];
-  if (km.series && km.series.length) {
-    subtitleParts.push(`${km.series.length} ${pluralPoints(km.series.length)} в периоде`);
-  }
-  if (qdRows && qdRows.length) {
-    subtitleParts.push(`${qdRows.length} ${pluralAnomalies(qdRows.length)} деградации`);
-  } else {
-    subtitleParts.push('сводка за период');
-  }
-
-  return `
-    <div class="anomalies-block">
-      <div class="drift-block-header km-block">
-        <div class="drift-block-title">Динамика ключевой метрики</div>
-        <div class="drift-block-subtitle">${escapeHtml(subtitleParts.join(' · '))}</div>
-      </div>
-      ${cardsHtml}
-    </div>
-  `;
-}
-
-function pluralPoints(n) {
-  const m100 = n % 100;
-  if (m100 >= 11 && m100 <= 14) return 'точек';
-  const m10 = n % 10;
-  if (m10 === 1) return 'точка';
-  if (m10 >= 2 && m10 <= 4) return 'точки';
-  return 'точек';
-}
-
-// synthetic card: when no quality_degradation events are present we still want
-// to show the chart inside a properly-structured card.
-function makeSyntheticKmCard() {
-  const km = state.km_dynamics;
-  const series = (km.series || []).slice().sort((a, b) => (a.date || '').localeCompare(b.date || ''));
-  const first = series[0], last = series[series.length - 1];
-  const starttime = first ? `${first.date}T00:00:00Z` : '';
-  const endtime   = last  ? `${last.date}T23:59:59Z` : '';
-
-  // pre-existing markup persisted on km_dynamics if user marked it earlier
-  const stored = (km && km.markup) || {};
-
-  return {
-    id: 'km-period',
-    _synthetic: true,
-    trace_id: '',
-    starttime: starttime,
-    endtime:   endtime,
-    anomaly_type: 'quality_degradation',
-    confidence: null,
-    business_description: generateKmDescription(km),
-    user_query: '',
-    agent_response: '',
-    tech_details: generateKmTechDetails(km),
-    rca_results: '',
-    is_anomaly: stored.is_anomaly || '',
-    severity: stored.severity || '',
-    comments: stored.comments || ''
-  };
-}
-
-function generateKmDescription(km) {
-  if (!km || !km.series || !km.series.length) return 'Сводная динамика ключевой метрики за период мониторинга.';
-  const series = km.series.slice().sort((a, b) => (a.date || '').localeCompare(b.date || ''));
-  const kmVals = series.map(s => Number(s.km)).filter(v => !Number.isNaN(v));
-  if (!kmVals.length) return 'Сводная динамика ключевой метрики за период мониторинга.';
-
-  const minVal = Math.min(...kmVals);
-  const minIdx = kmVals.indexOf(minVal);
-  const minDate = series[minIdx].date;
-  const baseline = (typeof km.baseline === 'number') ? km.baseline : null;
-  const yellowPp = (km.thresholds && km.thresholds.yellow_pp) || 15;
-  const redPp    = (km.thresholds && km.thresholds.red_pp)    || 25;
-
-  const parts = [];
-  if (baseline != null) {
-    const drop = (baseline - minVal) * 100;
-    let zone = 'зелёной зоне';
-    if (drop > redPp) zone = 'красной зоне';
-    else if (drop >= yellowPp) zone = 'жёлтой зоне';
-    parts.push(`За период минимальное значение KM ${minVal.toFixed(2)} достигнуто ${formatRusDate(minDate)} — снижение на ${drop.toFixed(0)} п.п. от baseline ${baseline.toFixed(2)} (в ${zone}).`);
-  } else {
-    parts.push(`За период минимальное значение KM — ${minVal.toFixed(2)} (${formatRusDate(minDate)}).`);
-  }
-  const delta = kmVals[kmVals.length - 1] - kmVals[0];
-  parts.push(`Δ KM конец−начало: ${(delta >= 0 ? '+' : '') + delta.toFixed(2)}.`);
-  return parts.join(' ');
-}
-
-function generateKmTechDetails(km) {
-  if (!km || !km.series || !km.series.length) return '';
-  const series = km.series.slice().sort((a, b) => (a.date || '').localeCompare(b.date || ''));
-  const baseline = (typeof km.baseline === 'number') ? km.baseline.toFixed(2) : '—';
-  const yPp = (km.thresholds && km.thresholds.yellow_pp) || 15;
-  const rPp = (km.thresholds && km.thresholds.red_pp)    || 25;
-  const lines = [
-    `baseline = ${baseline}; пороги: жёлтая зона −${yPp} п.п., красная зона −${rPp} п.п.`,
-    `KM по точкам: ${series.map(s => `${s.date.slice(5)}=${Number(s.km).toFixed(2)}`).join(', ')}.`,
-    `Точность Автоасессора: ${series.map(s => (s.assessor_accuracy != null) ? `${s.date.slice(5)}=${Number(s.assessor_accuracy).toFixed(2)}` : null).filter(Boolean).join(', ') || '—'}.`
-  ];
-  return lines.join('\n');
-}
-
-// renderKmCard — same visual structure as renderAnomalyCard for drift,
-// but with the chart embedded in the body (only on the primary card).
-function renderKmCard(r, displayIdx, embedChart) {
-  const km = state.km_dynamics;
+function renderAnomalyCard(r, displayIdx) {
   const status = r.is_anomaly || 'unmarked';
   const statusLabel = STATUS_LABELS[status];
-  const typeKey = r.anomaly_type || 'quality_degradation';
-  const typeLabel = ANOMALY_TYPE_LABELS[typeKey] || r.anomaly_type || 'Деградация КМ';
-  const interval = formatTimeInterval(r.starttime, r.endtime);
-  const confHtml = renderConfidenceBadge(r.confidence);
-  const numStr = 'KM-' + String(displayIdx + 1).padStart(3, '0');
-
-  const idBlockHtml = `
-    <div class="anomaly-id-block">
-      <div class="anomaly-timestamp">${interval}</div>
-    </div>`;
-
-  // chart block — only on primary card
-  let chartBlock = '';
-  if (embedChart && km && km.series && km.series.length) {
-    chartBlock = renderKmChartBlock(km);
-  }
-
-  return `
-    <div class="anomaly-card ${status} drift-card km-card${r._synthetic ? ' km-synthetic' : ''}" data-id="${escapeHtml(r.id)}"${r._synthetic ? ' data-km-synthetic="true"' : ''}>
-      <div class="anomaly-head">
-        <div class="anomaly-num">${numStr}</div>
-        ${idBlockHtml}
-        <span class="anomaly-type-badge ${typeKey}">${escapeHtml(typeLabel)}</span>
-        ${confHtml}
-        <span class="anomaly-status ${status}">${statusLabel}</span>
-      </div>
-
-      <div class="anomaly-body">
-        ${r.business_description ? `
-          <div class="biz-description">
-            <div class="biz-description-label">${embedChart ? 'Описание динамики' : 'Описание события'}</div>
-            <div class="biz-description-text">${escapeHtml(r.business_description)}</div>
-          </div>
-        ` : ''}
-
-        ${chartBlock}
-
-        ${r.tech_details ? `
-          <div class="tech-details-collapse">
-            <button type="button" class="tech-details-toggle" data-toggle-tech aria-expanded="false">
-              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg>
-              Технические детали
-              <span class="source-tag">Автоасессор</span>
-            </button>
-            <div class="tech-details-content" hidden>${escapeHtml(r.tech_details)}</div>
-          </div>
-        ` : ''}
-      </div>
-
-      <div class="markup-section">
-        <div class="markup-header">Разметка Владельца</div>
-        <div class="markup-grid">
-          <div class="markup-field">
-            <span class="markup-field-label">Признаёте аномалию?<span class="req">*</span></span>
-            <div class="radio-group">
-              <div class="radio-btn">
-                <input type="radio" id="anom-${r.id}-conf" name="is_anomaly-${r.id}" value="confirmed" ${r.is_anomaly === 'confirmed' ? 'checked' : ''} data-field="is_anomaly">
-                <label for="anom-${r.id}-conf" class="confirm">Подтверждаю</label>
-              </div>
-              <div class="radio-btn">
-                <input type="radio" id="anom-${r.id}-unc" name="is_anomaly-${r.id}" value="uncertain" ${r.is_anomaly === 'uncertain' ? 'checked' : ''} data-field="is_anomaly">
-                <label for="anom-${r.id}-unc" class="uncertain">Не уверен</label>
-              </div>
-              <div class="radio-btn">
-                <input type="radio" id="anom-${r.id}-rej" name="is_anomaly-${r.id}" value="rejected" ${r.is_anomaly === 'rejected' ? 'checked' : ''} data-field="is_anomaly">
-                <label for="anom-${r.id}-rej" class="reject">Отклоняю</label>
-              </div>
-            </div>
-          </div>
-
-          <div class="markup-field">
-            <span class="markup-field-label">Критичность</span>
-            <select data-field="severity">
-              <option value="" ${!r.severity ? 'selected' : ''}>— не указано —</option>
-              <option value="low"      ${r.severity === 'low' ? 'selected' : ''}>Низкая</option>
-              <option value="medium"   ${r.severity === 'medium' ? 'selected' : ''}>Средняя</option>
-              <option value="high"     ${r.severity === 'high' ? 'selected' : ''}>Высокая</option>
-              <option value="critical" ${r.severity === 'critical' ? 'selected' : ''}>Критическая</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="markup-field">
-          <span class="markup-field-label">Комментарий — опционально</span>
-          <textarea data-field="comments" placeholder="Контекст, наблюдения, обоснование решения, ссылки на связанные инциденты или тикеты…">${escapeHtml(r.comments || '')}</textarea>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-function renderKmChartBlock(km) {
-  const baseline = (typeof km.baseline === 'number') ? km.baseline : null;
-  const yellowPp = (km.thresholds && typeof km.thresholds.yellow_pp === 'number') ? km.thresholds.yellow_pp : 15;
-  const redPp    = (km.thresholds && typeof km.thresholds.red_pp === 'number')    ? km.thresholds.red_pp    : 25;
-
-  const series = km.series.slice().sort((a, b) => (a.date || '').localeCompare(b.date || ''));
-  const kmValues = series.map(s => Number(s.km)).filter(v => !Number.isNaN(v));
-  const accValues = series.map(s => (s.assessor_accuracy != null) ? Number(s.assessor_accuracy) : null).filter(v => v != null && !Number.isNaN(v));
-
-  const avg = arr => arr.length ? (arr.reduce((s,v) => s+v, 0) / arr.length) : null;
-  const kmAvg = avg(kmValues);
-  const accAvg = avg(accValues);
-  const kmDelta = (kmValues.length >= 2) ? (kmValues[kmValues.length - 1] - kmValues[0]) : null;
-
-  const statHtml = `
-    <div class="km-legend-stat">
-      <div class="km-legend-stat-item">
-        <span class="km-legend-stat-label">KM ср.</span>
-        <span class="km-legend-stat-value">${kmAvg != null ? kmAvg.toFixed(2) : '—'}</span>
-      </div>
-      <div class="km-legend-stat-item">
-        <span class="km-legend-stat-label">Δ KM</span>
-        <span class="km-legend-stat-value ${kmDelta != null ? (kmDelta >= 0 ? 'up' : 'down') : ''}">${
-          kmDelta != null ? (kmDelta >= 0 ? '+' : '') + kmDelta.toFixed(2) : '—'
-        }</span>
-      </div>
-      <div class="km-legend-stat-item">
-        <span class="km-legend-stat-label">Точность ср.</span>
-        <span class="km-legend-stat-value">${accAvg != null ? accAvg.toFixed(2) : '—'}</span>
-      </div>
-    </div>
-  `;
-
-  const svg = renderKmChartSvg(series, baseline, yellowPp, redPp);
-
-  const yellowVal = baseline != null ? (baseline - yellowPp / 100) : null;
-  const redVal    = baseline != null ? (baseline - redPp / 100) : null;
-  const thresholdsInfo = baseline != null ? `
-    <div class="km-thresholds-info">
-      Зоны рассчитаны от baseline <strong>${baseline.toFixed(2)}</strong> (приходит из системы):
-      <strong>зелёная</strong> — снижение менее ${yellowPp} п.п. (KM ≥ ${yellowVal.toFixed(2)});
-      <strong>жёлтая</strong> — снижение от ${yellowPp} до ${redPp} п.п. (${redVal.toFixed(2)} ≤ KM &lt; ${yellowVal.toFixed(2)});
-      <strong>красная</strong> — снижение более ${redPp} п.п. (KM &lt; ${redVal.toFixed(2)}).
-    </div>
-  ` : '';
-
-  let stripHtml = '';
-  if (state.timeline && state.timeline.length) {
-    const dates = series.map(s => s.date);
-    const cells = dates.map(d => {
-      const tl = state.timeline.find(t => t.date === d);
-      const z = tl ? tl.zone : 'empty';
-      return `<div class="km-zone-cell ${z}" title="${escapeHtml(d + ' · ' + (tl ? (ZONE_INFO[tl.zone]?.name || '') : 'нет данных'))}"></div>`;
-    }).join('');
-    stripHtml = `
-      <div class="km-zone-strip">
-        <div class="km-zone-strip-label">Светофор по дням</div>
-        <div class="km-zone-row" style="grid-template-columns: repeat(${dates.length}, 1fr);">${cells}</div>
-      </div>
-    `;
-  }
-
-  return `
-    <div class="km-chart-block">
-      <div class="km-legend">
-        <div class="km-legend-item"><span class="km-legend-line km"></span>Ключевая метрика (KM)</div>
-        <div class="km-legend-item"><span class="km-legend-line assessor"></span>Точность Автоасессора</div>
-        <span class="km-legend-zone green"><span class="km-legend-zone-dot"></span>зелёная зона</span>
-        <span class="km-legend-zone yellow"><span class="km-legend-zone-dot"></span>жёлтая зона</span>
-        <span class="km-legend-zone red"><span class="km-legend-zone-dot"></span>красная зона</span>
-        ${statHtml}
-      </div>
-      ${svg}
-      ${thresholdsInfo}
-      ${stripHtml}
-    </div>
-  `;
-}
-
-// ===== KM CHART SVG =====
-function renderKmChartSvg(series, baseline, yellowPp, redPp) {
-  // viewBox geometry
-  const VB_W = 900, VB_H = 280;
-  const PAD_L = 50, PAD_R = 20, PAD_T = 14, PAD_B = 42;
-  const PLOT_W = VB_W - PAD_L - PAD_R; // 830
-  const PLOT_H = VB_H - PAD_T - PAD_B; // 224
-
-  // y range — adaptive but constrained
-  const allVals = [];
-  series.forEach(s => {
-    if (typeof s.km === 'number') allVals.push(s.km);
-    if (typeof s.assessor_accuracy === 'number') allVals.push(s.assessor_accuracy);
-  });
-  const yellowVal = (baseline != null) ? baseline - yellowPp / 100 : null;
-  const redVal    = (baseline != null) ? baseline - redPp / 100    : null;
-  if (yellowVal != null) allVals.push(yellowVal);
-  if (redVal != null)    allVals.push(redVal);
-
-  let yMin = Math.min(...allVals, 0.5);
-  let yMax = Math.max(...allVals, 1.0);
-  // round to nice step
-  yMin = Math.floor(yMin * 10) / 10;
-  yMax = Math.ceil(yMax * 10) / 10;
-  if (yMax - yMin < 0.4) yMax = yMin + 0.4;
-
-  const yToPx = v => PAD_T + (yMax - v) / (yMax - yMin) * PLOT_H;
-  const xToPx = i => {
-    if (series.length === 1) return PAD_L + PLOT_W / 2;
-    return PAD_L + (i / (series.length - 1)) * PLOT_W;
-  };
-
-  // y gridlines
-  const gridStep = 0.1;
-  const gridlines = [];
-  for (let v = Math.round(yMin * 10) / 10; v <= yMax + 1e-9; v += gridStep) {
-    const y = yToPx(v);
-    gridlines.push(`
-      <line x1="${PAD_L}" x2="${VB_W - PAD_R}" y1="${y.toFixed(2)}" y2="${y.toFixed(2)}" stroke="#E4E8EC" stroke-width="1"/>
-      <text x="${PAD_L - 6}" y="${(y + 4).toFixed(2)}" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="10" fill="#9CA3AF">${v.toFixed(2)}</text>
-    `);
-  }
-
-  // zone backgrounds (only if baseline)
-  let zonesBg = '';
-  if (baseline != null) {
-    const yYellow = yToPx(yellowVal);
-    const yRed    = yToPx(redVal);
-    const yTop    = PAD_T;
-    const yBot    = PAD_T + PLOT_H;
-    // green: top → yYellow
-    if (yYellow > yTop) {
-      zonesBg += `<rect x="${PAD_L}" y="${yTop}" width="${PLOT_W}" height="${(yYellow - yTop).toFixed(2)}" fill="#16A34A" fill-opacity="0.05"/>`;
-    }
-    // yellow: yYellow → yRed
-    if (yRed > yYellow) {
-      zonesBg += `<rect x="${PAD_L}" y="${yYellow.toFixed(2)}" width="${PLOT_W}" height="${(yRed - yYellow).toFixed(2)}" fill="#EAB308" fill-opacity="0.08"/>`;
-    }
-    // red: yRed → bottom
-    if (yBot > yRed) {
-      zonesBg += `<rect x="${PAD_L}" y="${yRed.toFixed(2)}" width="${PLOT_W}" height="${(yBot - yRed).toFixed(2)}" fill="#DC2626" fill-opacity="0.06"/>`;
-    }
-  }
-
-  // threshold lines
-  let thresholds = '';
-  if (baseline != null) {
-    const yY = yToPx(yellowVal);
-    const yR = yToPx(redVal);
-    thresholds = `
-      <line x1="${PAD_L}" x2="${VB_W - PAD_R}" y1="${yY.toFixed(2)}" y2="${yY.toFixed(2)}" stroke="#EAB308" stroke-width="1.2" stroke-dasharray="6,4"/>
-      <text x="${VB_W - PAD_R - 4}" y="${(yY - 4).toFixed(2)}" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="9" fill="#B7861A">−${yellowPp} п.п. · ${yellowVal.toFixed(2)}</text>
-      <line x1="${PAD_L}" x2="${VB_W - PAD_R}" y1="${yR.toFixed(2)}" y2="${yR.toFixed(2)}" stroke="#DC2626" stroke-width="1.2" stroke-dasharray="6,4"/>
-      <text x="${VB_W - PAD_R - 4}" y="${(yR - 4).toFixed(2)}" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="9" fill="#DC2626">−${redPp} п.п. · ${redVal.toFixed(2)}</text>
-    `;
-  }
-
-  // baseline indicator
-  let baselineLine = '';
-  if (baseline != null) {
-    const yB = yToPx(baseline);
-    baselineLine = `
-      <line x1="${PAD_L}" x2="${VB_W - PAD_R}" y1="${yB.toFixed(2)}" y2="${yB.toFixed(2)}" stroke="#9CA3AF" stroke-width="1" stroke-dasharray="2,3" opacity="0.7"/>
-      <text x="${PAD_L + 4}" y="${(yB - 4).toFixed(2)}" text-anchor="start" font-family="IBM Plex Mono, monospace" font-size="9" fill="#6B7280">baseline ${baseline.toFixed(2)}</text>
-    `;
-  }
-
-  // x-axis labels
-  const xLabels = series.map((s, i) => {
-    const dt = s.date ? s.date.slice(5).replace('-', '.') : '';
-    return `<text x="${xToPx(i).toFixed(2)}" y="${(VB_H - PAD_B + 16).toFixed(2)}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="#6B7280">${escapeHtml(dt)}</text>`;
-  }).join('');
-
-  // KM line + area
-  const kmPoints = series.map((s, i) => `${xToPx(i).toFixed(2)},${yToPx(s.km).toFixed(2)}`).join(' ');
-  const kmAreaPts = series.map((s, i) => `${xToPx(i).toFixed(2)},${yToPx(s.km).toFixed(2)}`);
-  const kmAreaPath = `M ${kmAreaPts.join(' L ')} L ${xToPx(series.length - 1).toFixed(2)},${(PAD_T + PLOT_H).toFixed(2)} L ${PAD_L.toFixed(2)},${(PAD_T + PLOT_H).toFixed(2)} Z`;
-
-  // assessor line
-  const accPoints = series
-    .map((s, i) => (typeof s.assessor_accuracy === 'number') ? `${xToPx(i).toFixed(2)},${yToPx(s.assessor_accuracy).toFixed(2)}` : null)
-    .filter(p => p != null)
-    .join(' ');
-
-  // determine "dip" markers: KM points in yellow/red zone get filled, others empty
-  const isKmDip = (val) => baseline != null && (baseline - val) * 100 >= yellowPp;
-  const isAccDip = (val) => val != null && val < 0.80;
-
-  const kmMarkers = series.map((s, i) => {
-    const cx = xToPx(i).toFixed(2), cy = yToPx(s.km).toFixed(2);
-    if (isKmDip(s.km)) {
-      return `<circle cx="${cx}" cy="${cy}" r="5" fill="#1D9E75" stroke="#FFFFFF" stroke-width="2"/>` +
-             `<text x="${cx}" y="${(yToPx(s.km) + 18).toFixed(2)}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="600" fill="#0F7A5A">${s.km.toFixed(2)}</text>`;
-    }
-    return `<circle cx="${cx}" cy="${cy}" r="4" fill="#FFFFFF" stroke="#1D9E75" stroke-width="2"/>`;
-  }).join('');
-
-  const accMarkers = series.map((s, i) => {
-    if (typeof s.assessor_accuracy !== 'number') return '';
-    const cx = xToPx(i).toFixed(2), cy = yToPx(s.assessor_accuracy).toFixed(2);
-    if (isAccDip(s.assessor_accuracy)) {
-      return `<circle cx="${cx}" cy="${cy}" r="3.5" fill="#6B7280" stroke="#FFFFFF" stroke-width="1.5"/>` +
-             `<text x="${cx}" y="${(yToPx(s.assessor_accuracy) + 16).toFixed(2)}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9.5" font-weight="600" fill="#6B7280">${s.assessor_accuracy.toFixed(2)}</text>`;
-    }
-    return `<circle cx="${cx}" cy="${cy}" r="2.5" fill="#FFFFFF" stroke="#9CA3AF" stroke-width="1.3"/>`;
-  }).join('');
-
-  return `
-    <svg class="km-chart-svg" viewBox="0 0 ${VB_W} ${VB_H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="График динамики ключевой метрики">
-      <defs>
-        <linearGradient id="km-fill" x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0%" stop-color="#1D9E75" stop-opacity="0.18"/>
-          <stop offset="100%" stop-color="#1D9E75" stop-opacity="0"/>
-        </linearGradient>
-      </defs>
-      ${zonesBg}
-      ${gridlines.join('')}
-      ${thresholds}
-      ${baselineLine}
-      ${xLabels}
-      <path d="${kmAreaPath}" fill="url(#km-fill)"/>
-      <polyline points="${kmPoints}" fill="none" stroke="#1D9E75" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
-      ${accPoints ? `<polyline points="${accPoints}" fill="none" stroke="#9CA3AF" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="4,3"/>` : ''}
-      ${kmMarkers}
-      ${accMarkers}
-    </svg>
-  `;
-}
-
-function renderAnomalyCard(r, displayIdx, isDrift) {
-  const status = r.is_anomaly || 'unmarked';
-  const statusLabel = STATUS_LABELS[status];
-  const typeKey = r.anomaly_type || 'other';
+  const typeKey = r.anomaly_type || 'anomaly';
   const typeLabel = ANOMALY_TYPE_LABELS[typeKey] || r.anomaly_type || '—';
 
   const interval = formatTimeInterval(r.starttime, r.endtime);
   const confHtml = renderConfidenceBadge(r.confidence);
-
-  const numPrefix = isDrift ? 'D-' : '#';
-  const numStr = numPrefix + String(displayIdx + 1).padStart(3, '0');
-
-  // ID block: drift cards do not show trace_id (per spec) — only interval
-  const idBlockHtml = isDrift
-    ? `<div class="anomaly-id-block">
-         <div class="anomaly-timestamp">${interval}</div>
-       </div>`
-    : `<div class="anomaly-id-block">
-         <div class="anomaly-trace-id" title="${escapeHtml(r.trace_id || '')}">${escapeHtml(r.trace_id || '—')}</div>
-         <div class="anomaly-timestamp">${interval}</div>
-       </div>`;
-
-  // body content differs for drift vs other
-  const dialogueHtml = isDrift ? '' : `
-    <div class="dialogue-grid">
-      <div class="dialogue-block">
-        <div class="dialogue-label user">Запрос пользователя</div>
-        <div class="dialogue-content user-content ${r.user_query ? '' : 'empty'}">${
-          r.user_query ? escapeHtml(r.user_query) : 'нет данных или статистическая аномалия'
-        }</div>
-      </div>
-      <div class="dialogue-block">
-        <div class="dialogue-label agent">Ответ агента</div>
-        <div class="dialogue-content agent-content ${r.agent_response ? '' : 'empty'}">${
-          r.agent_response ? escapeHtml(r.agent_response) : 'нет данных или статистическая аномалия'
-        }</div>
-      </div>
-    </div>
-  `;
-
-  const rcaHtml = (isDrift || !r.rca_results) ? '' : `
-    <div class="rca-block">
-      <div class="detail-label">RCA — потенциальная причина <span class="source-tag">RCA</span></div>
-      <div class="detail-content">${escapeHtml(r.rca_results)}</div>
-    </div>
-  `;
+  const numStr = '#' + String(displayIdx + 1).padStart(3, '0');
 
   return `
-    <div class="anomaly-card ${status}${isDrift ? ' drift-card' : ''}" data-id="${escapeHtml(r.id)}">
+    <div class="anomaly-card ${status}" data-id="${escapeHtml(r.id)}">
       <div class="anomaly-head">
         <div class="anomaly-num">${numStr}</div>
-        ${idBlockHtml}
+        <div class="anomaly-id-block">
+          <div class="anomaly-trace-id" title="${escapeHtml(r.trace_id || '')}">${escapeHtml(r.trace_id || '—')}</div>
+          <div class="anomaly-timestamp">${interval}</div>
+        </div>
         <span class="anomaly-type-badge ${typeKey}">${escapeHtml(typeLabel)}</span>
         ${confHtml}
         <span class="anomaly-status ${status}">${statusLabel}</span>
@@ -3106,8 +1998,27 @@ function renderAnomalyCard(r, displayIdx, isDrift) {
           </div>
         ` : ''}
 
-        ${dialogueHtml}
-        ${rcaHtml}
+        <div class="dialogue-grid">
+          <div class="dialogue-block">
+            <div class="dialogue-label user">Запрос пользователя</div>
+            <div class="dialogue-content user-content ${r.user_query ? '' : 'empty'}">${
+              r.user_query ? escapeHtml(r.user_query) : 'нет данных или статистическая аномалия'
+            }</div>
+          </div>
+          <div class="dialogue-block">
+            <div class="dialogue-label agent">Ответ агента</div>
+            <div class="dialogue-content agent-content ${r.agent_response ? '' : 'empty'}">${
+              r.agent_response ? escapeHtml(r.agent_response) : 'нет данных или статистическая аномалия'
+            }</div>
+          </div>
+        </div>
+
+        ${r.rca_results ? `
+          <div class="rca-block">
+            <div class="detail-label">RCA — потенциальная причина <span class="source-tag">RCA</span></div>
+            <div class="detail-content">${escapeHtml(r.rca_results)}</div>
+          </div>
+        ` : ''}
 
         ${r.tech_details ? `
           <div class="tech-details-collapse">
@@ -3208,49 +2119,22 @@ function bindAnomalyEvents() {
   // markup field changes
   document.querySelectorAll('.anomaly-card').forEach(card => {
     const id = card.dataset.id;
-    const isSyntheticKm = card.dataset.kmSynthetic === 'true';
     card.querySelectorAll('[data-field]').forEach(el => {
       const handler = e => {
         const field = e.target.dataset.field;
-        let value = e.target.value;
+        const value = e.target.value;
         if (e.target.type === 'radio' && !e.target.checked) return;
 
-        // class affixes for visual state restoration
-        const restoreClasses = (status) => {
-          const baseClasses = ['anomaly-card', status];
-          if (card.classList.contains('drift-card'))   baseClasses.push('drift-card');
-          if (card.classList.contains('km-card'))      baseClasses.push('km-card');
-          if (card.classList.contains('km-synthetic')) baseClasses.push('km-synthetic');
-          card.className = baseClasses.join(' ');
-        };
-
-        if (isSyntheticKm) {
-          // persist markup on km_dynamics.markup
-          if (!state.km_dynamics) return;
-          if (!state.km_dynamics.markup) state.km_dynamics.markup = {};
-          state.km_dynamics.markup[field] = value;
-          if (field === 'is_anomaly') {
-            const newStatus = value || 'unmarked';
-            restoreClasses(newStatus);
-            const statusEl = card.querySelector('.anomaly-status');
-            statusEl.className = `anomaly-status ${newStatus}`;
-            statusEl.textContent = STATUS_LABELS[newStatus];
-            renderSummary();
-          }
-          return;
-        }
-
         const idx = state.anomalies.findIndex(a => a.id === id);
-        if (idx >= 0) {
-          state.anomalies[idx][field] = value;
-          if (field === 'is_anomaly') {
-            const newStatus = value || 'unmarked';
-            restoreClasses(newStatus);
-            const statusEl = card.querySelector('.anomaly-status');
-            statusEl.className = `anomaly-status ${newStatus}`;
-            statusEl.textContent = STATUS_LABELS[newStatus];
-            renderSummary();
-          }
+        if (idx < 0) return;
+        state.anomalies[idx][field] = value;
+        if (field === 'is_anomaly') {
+          const newStatus = value || 'unmarked';
+          card.className = `anomaly-card ${newStatus}`;
+          const statusEl = card.querySelector('.anomaly-status');
+          statusEl.className = `anomaly-status ${newStatus}`;
+          statusEl.textContent = STATUS_LABELS[newStatus];
+          renderSummary();
         }
       };
       el.addEventListener('change', handler);
@@ -3273,28 +2157,12 @@ function bindAnomalyEvents() {
 function populateTypeFilter() {
   const select = document.getElementById('filter-type');
   const current = select.value;
-  const present = new Set(state.anomalies.map(a => a.anomaly_type).filter(Boolean));
-  let html = '<option value="">Все типы</option>';
-  ANOMALY_TYPE_GROUPS.forEach(grp => {
-    const types = grp.types.filter(t => present.has(t));
-    if (types.length === 0) return;
-    html += `<optgroup label="${escapeHtml(grp.name)}">`;
-    types.forEach(t => {
-      html += `<option value="${escapeHtml(t)}" ${t === current ? 'selected' : ''}>${escapeHtml(ANOMALY_TYPE_LABELS[t] || t)}</option>`;
-    });
-    html += '</optgroup>';
-  });
-  // include any unknown types (defensive)
-  const known = new Set(Object.keys(ANOMALY_TYPE_LABELS));
-  const unknown = [...present].filter(t => !known.has(t));
-  if (unknown.length) {
-    html += '<optgroup label="Прочее">';
-    unknown.forEach(t => {
-      html += `<option value="${escapeHtml(t)}" ${t === current ? 'selected' : ''}>${escapeHtml(t)}</option>`;
-    });
-    html += '</optgroup>';
-  }
-  select.innerHTML = html;
+  const present = [...new Set(state.anomalies.map(a => a.anomaly_type).filter(Boolean))];
+  const known = Object.keys(ANOMALY_TYPE_LABELS).filter(t => present.includes(t));
+  const unknown = present.filter(t => !ANOMALY_TYPE_LABELS[t]).sort();
+  select.innerHTML = '<option value="">Все типы</option>' + [...known, ...unknown].map(t =>
+    `<option value="${escapeHtml(t)}" ${t === current ? 'selected' : ''}>${escapeHtml(ANOMALY_TYPE_LABELS[t] || t)}</option>`
+  ).join('');
 }
 
 // =========================================================================
@@ -3305,10 +2173,9 @@ function renderSummary() {
   const marked = state.anomalies.filter(a => a.is_anomaly).length;
   const confirmed = state.anomalies.filter(a => a.is_anomaly === 'confirmed').length;
   const rejected = state.anomalies.filter(a => a.is_anomaly === 'rejected').length;
-  const uncertain = state.anomalies.filter(a => a.is_anomaly === 'uncertain').length;
 
   document.getElementById('stat-total').textContent = total;
-  document.getElementById('stat-total-sub').textContent = total === 0 ? 'импорт пока пуст' : `в импорте за период`;
+  document.getElementById('stat-total-sub').textContent = total === 0 ? 'импорт пока пуст' : 'в импорте за период';
 
   document.getElementById('stat-marked').textContent = marked;
   document.getElementById('stat-marked-sub').textContent = total ? `${Math.round(marked/total*100)}% от общего числа` : '0%';
@@ -3319,50 +2186,23 @@ function renderSummary() {
   document.getElementById('stat-rejected').textContent = rejected;
   document.getElementById('stat-rejected-sub').textContent = marked ? `${Math.round(rejected/marked*100)}% от размеченных` : '— %';
 
-  // group splits
-  const driftSet = new Set(['drift_oos_oot', 'drift_local', 'drift_global']);
-  const kmSet = new Set(['quality_degradation']);
-  const driftAnoms = state.anomalies.filter(a => driftSet.has(a.anomaly_type));
-  const kmAnoms = state.anomalies.filter(a => kmSet.has(a.anomaly_type));
-  const detAnoms = state.anomalies.filter(a => !driftSet.has(a.anomaly_type) && !kmSet.has(a.anomaly_type));
-
-  // ---------- KM dynamics group ----------
-  renderKmSummary(kmAnoms);
-
-  // ---------- Drift group ----------
-  // distribution by type within drift
-  const driftTypeCounts = {};
-  driftAnoms.forEach(a => {
-    const t = a.anomaly_type || 'other';
-    driftTypeCounts[t] = (driftTypeCounts[t] || 0) + 1;
-  });
-  renderDistributionBars('dist-drift-type',
-    Object.entries(driftTypeCounts).sort((a,b) => b[1] - a[1]).map(([k, v]) => ({
-      label: ANOMALY_TYPE_LABELS[k] || k,
-      value: v,
-      total: driftAnoms.length,
-      cls: ''
-    }))
-  );
-  renderDistributionBars('dist-drift-status', buildStatusData(driftAnoms));
-
-  // ---------- Detector anomalies group ----------
-  const detTypeCounts = {};
-  detAnoms.forEach(a => {
-    const t = a.anomaly_type || 'other';
-    detTypeCounts[t] = (detTypeCounts[t] || 0) + 1;
+  // ---------- Распределение по типам ----------
+  const typeCounts = {};
+  state.anomalies.forEach(a => {
+    const t = a.anomaly_type || 'anomaly';
+    typeCounts[t] = (typeCounts[t] || 0) + 1;
   });
   renderDistributionBars('dist-anom-type',
-    Object.entries(detTypeCounts).sort((a,b) => b[1] - a[1]).map(([k, v]) => ({
+    Object.entries(typeCounts).sort((a, b) => b[1] - a[1]).map(([k, v]) => ({
       label: ANOMALY_TYPE_LABELS[k] || k,
       value: v,
-      total: detAnoms.length,
+      total: total,
       cls: ''
     }))
   );
-  renderDistributionBars('dist-anom-status', buildStatusData(detAnoms));
+  renderDistributionBars('dist-anom-status', buildStatusData(state.anomalies));
 
-  // ---------- Severity (overall, only confirmed) ----------
+  // ---------- Критичность (только подтверждённые) ----------
   const sevCounts = {};
   state.anomalies.forEach(a => { if (a.is_anomaly === 'confirmed' && a.severity) sevCounts[a.severity] = (sevCounts[a.severity] || 0) + 1; });
   const sevOrder = ['critical', 'high', 'medium', 'low'];
@@ -3387,72 +2227,6 @@ function buildStatusData(arr) {
     { label: 'Требует доисследования', value: u,         total: total, cls: 'uncertain' },
     { label: 'Не размечено',           value: total - m, total: total, cls: '' }
   ].filter(d => d.value > 0);
-}
-
-function renderKmSummary(qdEvents) {
-  const km = state.km_dynamics;
-  const elAvg = document.getElementById('km-stat-avg');
-  const elBaseline = document.getElementById('km-stat-baseline');
-  const elDelta = document.getElementById('km-stat-delta');
-  const elZone = document.getElementById('km-stat-zone');
-  const elAcc = document.getElementById('km-stat-acc');
-  const elAccSub = document.getElementById('km-stat-acc-sub');
-  const elEv = document.getElementById('km-stat-events');
-  const elEvSub = document.getElementById('km-stat-events-sub');
-
-  if (!km || !km.series || !km.series.length) {
-    elAvg.textContent = '—';
-    elBaseline.textContent = 'baseline —';
-    elDelta.textContent = '—';
-    elDelta.className = 'summary-stat-value';
-    elZone.textContent = '— зона';
-    elAcc.textContent = '—';
-    elEv.textContent = qdEvents.length;
-    elEvSub.textContent = qdEvents.length === 0 ? 'не выявлено' : 'в импорте';
-    renderDistributionBars('dist-km-status', buildStatusData(qdEvents));
-    return;
-  }
-
-  const series = km.series.slice().sort((a,b) => (a.date || '').localeCompare(b.date || ''));
-  const kmVals = series.map(s => Number(s.km)).filter(v => !Number.isNaN(v));
-  const accVals = series.map(s => (s.assessor_accuracy != null) ? Number(s.assessor_accuracy) : null).filter(v => v != null && !Number.isNaN(v));
-  const avg = arr => arr.length ? (arr.reduce((s,v) => s+v, 0) / arr.length) : null;
-  const kmAvg = avg(kmVals);
-  const accAvg = avg(accVals);
-  const delta = (kmVals.length >= 2) ? (kmVals[kmVals.length-1] - kmVals[0]) : null;
-
-  elAvg.textContent = kmAvg != null ? kmAvg.toFixed(2) : '—';
-  elBaseline.textContent = (typeof km.baseline === 'number') ? `baseline ${km.baseline.toFixed(2)}` : 'baseline —';
-
-  if (delta != null) {
-    elDelta.textContent = (delta >= 0 ? '+' : '') + delta.toFixed(2);
-    elDelta.className = 'summary-stat-value' + (delta >= 0 ? ' up' : ' down');
-  } else {
-    elDelta.textContent = '—';
-    elDelta.className = 'summary-stat-value';
-  }
-
-  // Determine zone for the lowest KM in period
-  const yellowPp = (km.thresholds && km.thresholds.yellow_pp) || 15;
-  const redPp = (km.thresholds && km.thresholds.red_pp) || 25;
-  const baseline = (typeof km.baseline === 'number') ? km.baseline : null;
-  if (baseline != null && kmVals.length) {
-    const minKm = Math.min(...kmVals);
-    const drop = (baseline - minKm) * 100;
-    let zoneTxt = 'зелёная зона';
-    if (drop > redPp) zoneTxt = 'красная зона';
-    else if (drop >= yellowPp) zoneTxt = 'жёлтая зона';
-    elZone.textContent = `мин. ${minKm.toFixed(2)} · ${zoneTxt}`;
-  } else {
-    elZone.textContent = '— зона';
-  }
-
-  elAcc.textContent = accAvg != null ? accAvg.toFixed(2) : '—';
-  elAccSub.textContent = `на ${accVals.length} ${accVals.length === 1 ? 'точке' : 'точках'} периода`;
-
-  elEv.textContent = qdEvents.length;
-  elEvSub.textContent = qdEvents.length === 0 ? 'деградация не выявлена' : 'в импорте';
-  renderDistributionBars('dist-km-status', buildStatusData(qdEvents));
 }
 
 function renderDistributionBars(containerId, data) {
@@ -3504,20 +2278,18 @@ function handleFileImport(e) {
 function importFromJSON(text) {
   const data = JSON.parse(text);
 
-  // shape 1: { metadata, timeline, anomalies, general_comment } — full draft re-import
-  // shape 2: { anomalies: [...], timeline: [...] } — system import
+  // shape 1: { metadata, anomalies, general_comment } — full draft re-import
+  // shape 2: { anomalies: [...] } — system import
   // shape 3: [...]  — array of anomalies only
 
-  let anomalies = null, timeline = null, metadata = null, generalComment = null, kmDynamics = null;
+  let anomalies = null, metadata = null, generalComment = null;
 
   if (Array.isArray(data)) {
     anomalies = data;
   } else if (typeof data === 'object' && data !== null) {
     anomalies = data.anomalies || null;
-    timeline = data.timeline || null;
     metadata = data.metadata || null;
     generalComment = data.general_comment || null;
-    kmDynamics = data.km_dynamics || null;
   } else {
     throw new Error('неподдерживаемая структура файла');
   }
@@ -3525,8 +2297,6 @@ function importFromJSON(text) {
   if (anomalies) {
     state.anomalies = anomalies.map((a, i) => normalizeAnomaly(a, i));
   }
-  if (timeline) state.timeline = timeline;
-  if (kmDynamics) state.km_dynamics = kmDynamics;
   if (metadata) {
     Object.assign(state.metadata, metadata);
     syncMetadataDisplay();
@@ -3536,9 +2306,8 @@ function importFromJSON(text) {
     document.getElementById('general_comment').value = generalComment;
   }
 
-  renderTimeline();
   renderAnomalies();
-  showToast(`Импортировано: ${state.anomalies.length} аномалий, ${state.timeline.length} запусков${kmDynamics ? ', динамика КМ' : ''}`, 'success');
+  showToast(`Импортировано аномалий: ${state.anomalies.length}`, 'success');
 }
 
 function importFromCSV(text) {
@@ -3640,7 +2409,7 @@ function parseCSV(text) {
 // EXPORT — JSON
 // =========================================================================
 function exportJSON() {
-  if (state.anomalies.length === 0 && !state.km_dynamics) {
+  if (state.anomalies.length === 0) {
     showToast('Нет данных для экспорта', 'error');
     return;
   }
@@ -3680,11 +2449,8 @@ function buildAnalyticsPayload() {
       owner: state.metadata.owner_name,
       period_from: state.metadata.period_from,
       period_to: state.metadata.period_to,
-      report_date: state.metadata.report_date,
-      integral_zone: computeIntegralZone()
+      report_date: state.metadata.report_date
     },
-    timeline: state.timeline,
-    km_dynamics: state.km_dynamics,
     general_comment: state.general_comment,
     anomalies: state.anomalies.map(a => ({
       // system prediction + context
@@ -3817,8 +2583,6 @@ function hydrateFromEmbeddedState() {
 
   if (saved.metadata) Object.assign(state.metadata, saved.metadata);
   if (typeof saved.general_comment === 'string') state.general_comment = saved.general_comment;
-  if (Array.isArray(saved.timeline)) state.timeline = saved.timeline;
-  if (saved.km_dynamics) state.km_dynamics = saved.km_dynamics;
   if (Array.isArray(saved.anomalies)) {
     state.anomalies = saved.anomalies.map((a, i) => normalizeAnomaly(a, i));
   }
@@ -4028,32 +2792,7 @@ function loadDemoData() {
     period_to: '2026-04-27',
     pilot_stage: 'Pilot'
   };
-  state.general_comment = 'За неделю мониторинга агент в целом работал стабильно: критических инцидентов в проде не было. Заметно ухудшение в среду (23.04) — совпало с релизом новой версии RAG-индекса. Несколько случаев hallucination в области валютного законодательства требуют доработки промпта или дополнительной проверки фактов через external источник. Тесты на дрифт показали локальные сдвиги в подвыборке клиентов МСБ.';
-
-  state.timeline = [
-    { date: '2026-04-21', zone: 'green' },
-    { date: '2026-04-22', zone: 'green' },
-    { date: '2026-04-23', zone: 'red' },
-    { date: '2026-04-24', zone: 'yellow' },
-    { date: '2026-04-25', zone: 'yellow' },
-    { date: '2026-04-26', zone: 'gray' },
-    { date: '2026-04-27', zone: 'green' }
-  ];
-
-  // KM dynamics — baseline + thresholds in п.п. (приходят из системы)
-  state.km_dynamics = {
-    baseline: 0.89,
-    thresholds: { yellow_pp: 15, red_pp: 25 },
-    series: [
-      { date: '2026-04-21', km: 0.89, assessor_accuracy: 0.84 },
-      { date: '2026-04-22', km: 0.88, assessor_accuracy: 0.85 },
-      { date: '2026-04-23', km: 0.60, assessor_accuracy: 0.83 },
-      { date: '2026-04-24', km: 0.71, assessor_accuracy: 0.82 },
-      { date: '2026-04-25', km: 0.78, assessor_accuracy: 0.82 },
-      { date: '2026-04-26', km: 0.83, assessor_accuracy: 0.72 },
-      { date: '2026-04-27', km: 0.87, assessor_accuracy: 0.84 }
-    ]
-  };
+  state.general_comment = 'За неделю мониторинга агент в целом работал стабильно: критических инцидентов в проде не было. Заметно ухудшение в среду (23.04) — совпало с релизом новой версии RAG-индекса. Несколько случаев hallucination в области валютного законодательства требуют доработки промпта или дополнительной проверки фактов через external источник.';
 
   state.anomalies = [
     {
@@ -4068,20 +2807,6 @@ function loadDemoData() {
       agent_response: 'В соответствии со статьёй 12.5 Федерального закона 173-ФЗ резиденты вправе осуществлять переводы без ограничений по сумме при условии уведомления налогового органа в течение 30 дней. Рекомендую обратиться в банк для оформления справки о валютной операции.',
       tech_details: 'Combined LSTM-AE detector. Reconstruction error = 4.82 (threshold 3.5). Anomalous span: agent FinAdvisor → tool RAG_retriever → response_3, tokens 142–268. Semantic embedding distance to nearest cluster centroid = 0.71. Output mentions Federal Law 173-FZ Article 12.5 — статья отсутствует в актуальной редакции закона.',
       rca_results: 'Агент FinAdvisor сгенерировал ссылку на несуществующую статью валютного законодательства. Источник в RAG-индексе не найден. Fact-check агент не сработал из-за того, что промпт был сформулирован как утверждение, а не как вопрос. Confidence: 0.84. Вероятная цепочка: cumulative hallucination через chain-of-thought reasoning.',
-      is_anomaly: '', severity: '', comments: ''
-    },
-    {
-      id: 'a2',
-      trace_id: 'trc-2026-04-23-2c91f5a8',
-      starttime: '2026-04-23T08:00:00Z',
-      endtime:   '2026-04-23T18:00:00Z',
-      anomaly_type: 'quality_degradation',
-      confidence: 91,
-      business_description: 'В течение дня 23.04 агент давал нечёткие ответы по теме «расчёт ставки по ипотеке» — в 6 случаях из 10 не указывал актуальные числовые значения и условия. Падение качества совпало с релизом нового RAG-индекса.',
-      user_query: 'Какая сейчас ставка по семейной ипотеке для семьи с двумя детьми?',
-      agent_response: 'Ставка по семейной ипотеке начинается от 6%. Точные условия зависят от вашей ситуации — лучше уточнить у менеджера в отделении или на сайте банка.',
-      tech_details: 'Автоасессор разметил 6 из 10 ответов в окне как «частично корректные» (KM_quality < 0.7). Динамика КМ: предыдущая неделя — 0.89, текущая — 0.74. Затронутая тематика: «расчёт ставки по ипотеке».',
-      rca_results: 'Падение качества коррелирует с релизом RAG-индекса v2.3.1 в 09:00 23.04. Новый индекс содержит обновлённые ставки ЦБ, но потерял 18% документов из категории «методические разъяснения ЦБ». Confidence: 0.91. Рекомендация RCA: восстановить недостающие документы в индексе или откатить версию.',
       is_anomaly: '', severity: '', comments: ''
     },
     {
@@ -4113,20 +2838,6 @@ function loadDemoData() {
       is_anomaly: '', severity: '', comments: ''
     },
     {
-      id: 'a5',
-      trace_id: 'trc-2026-04-25-d83c447b',
-      starttime: '2026-04-21T00:00:00Z',
-      endtime:   '2026-04-25T23:59:59Z',
-      anomaly_type: 'drift_local',
-      confidence: 74,
-      business_description: 'В подвыборке МСБ-клиентов (до 50 сотрудников) сместилось распределение сложности входящих запросов. Сами ответы агента в норме, но клиенты этого сегмента стали приходить с принципиально другими запросами — возможна реакция на новую маркетинговую кампанию.',
-      user_query: 'Хочу взять кредит на оборотные средства для своей фирмы — у нас 12 человек, грузоперевозки. Какие условия?',
-      agent_response: 'Для МСБ есть несколько программ кредитования: «Оборот для бизнеса» под 14,5% на срок до 36 месяцев, «Экспресс-овердрафт» до 5 млн без залога. Для вашего сегмента подойдёт первый вариант — пришлите документы и расчёт ДДС, рассмотрим в течение 2 рабочих дней.',
-      tech_details: 'Тест на локальный дрифт в подвыборке «МСБ-клиенты до 50 сотрудников». KS-statistic = 0.31, p-value = 0.0008 (значимо). Распределение фичи request_complexity_score сместилось вправо: ранее median 0.42, теперь 0.61. Срабатывание только в этой подгруппе, на глобальной выборке дрифта нет.',
-      rca_results: 'Возможное изменение паттернов входящих запросов от МСБ-клиентов. Потенциально связано с маркетинговой кампанией, запущенной 24.04 для этого сегмента. Confidence: 0.74. Рекомендация: проверить с маркетингом и оценить, нужно ли расширить fine-tune под новый паттерн запросов.',
-      is_anomaly: '', severity: '', comments: ''
-    },
-    {
       id: 'a6',
       trace_id: 'trc-2026-04-26-e991af23',
       starttime: '2026-04-26T11:22:47Z',
@@ -4141,20 +2852,6 @@ function loadDemoData() {
       is_anomaly: '', severity: '', comments: ''
     },
     {
-      id: 'a7',
-      trace_id: 'trc-2026-04-26-44ac7d18',
-      starttime: '2026-04-21T00:00:00Z',
-      endtime:   '2026-04-26T23:59:59Z',
-      anomaly_type: 'drift_oos_oot',
-      confidence: 68,
-      business_description: 'Поведение пользователей за неделю отличается от baseline предыдущего месяца сразу по 4 признакам (длина сессии, время суток, языковой состав, типы запросов). Деградации качества ответов пока нет, но требуется мониторинг.',
-      user_query: 'Что такое плавающая процентная ставка? Можете объяснить попроще?',
-      agent_response: 'Плавающая ставка — это ставка по кредиту, которая меняется со временем в зависимости от рыночных индикаторов (например, ключевой ставки ЦБ + надбавка банка). Если ключевая ставка растёт — ваш платёж увеличивается; если падает — уменьшается. Подходит, когда вы готовы к небольшим колебаниям ради потенциальной выгоды.',
-      tech_details: 'OOS-OOT тест: распределение признаков на out-of-time выборке (последние 7 дней) против baseline (предыдущий месяц). PSI = 0.28 (порог 0.2 — значимый дрифт). Затронуто 4 признака: avg_session_length, query_intent_distribution, user_lang_ratio, time_of_day_pattern.',
-      rca_results: 'Out-of-time дрифт по нескольким признакам одновременно — указывает на изменение поведенческого паттерна пользователей за неделю. Возможные причины: праздничный период / медиа-событие. Confidence: 0.68. Рекомендация: дождаться стабилизации, не предпринимать действий, если не будет деградации КМ.',
-      is_anomaly: '', severity: '', comments: ''
-    },
-    {
       id: 'a8',
       trace_id: 'trc-2026-04-22-12bb9e7f',
       starttime: '2026-04-22T15:01:18Z',
@@ -4166,20 +2863,6 @@ function loadDemoData() {
       agent_response: 'Для самозанятых у нас есть специальный продукт «Кредит для самозанятых» со ставкой от 3.9% годовых, лимит до 1 500 000 ₽, срок до 5 лет. Условия: подтверждение дохода через ФНС минимум 6 месяцев. Хотите я расскажу подробнее?',
       tech_details: 'Semantic detector: distance 0.69. Output упомянул несуществующий банковский продукт «Кредит для самозанятых под 3.9%». Reconstruction error = 3.61 (slightly above threshold 3.5).',
       rca_results: 'Агент сгенерировал несуществующий продукт. RAG не использовался для этого ответа (не сработал retrieval router). Hallucination на уровне core LLM. Confidence: 0.55 — низкая, потому что близко к границе threshold.',
-      is_anomaly: '', severity: '', comments: ''
-    },
-    {
-      id: 'a9',
-      trace_id: 'trc-2026-04-27-8aa2c103',
-      starttime: '2026-04-21T00:00:00Z',
-      endtime:   '2026-04-27T23:59:59Z',
-      anomaly_type: 'drift_global',
-      confidence: 41,
-      business_description: 'Слабый глобальный сдвиг распределения целевого score — на границе порога значимости. Может быть шумом или ранним сигналом начинающейся деградации.',
-      user_query: 'Какие документы нужны для рефинансирования ипотеки?',
-      agent_response: 'Для рефинансирования ипотеки потребуется: справка о текущем остатке долга, паспорт и СНИЛС, справка о доходах (2-НДФЛ или по форме банка), документы на квартиру (правоустанавливающие), отчёт об оценке. По документам поможет менеджер в отделении.',
-      tech_details: 'Глобальный тест на дрифт по всей популяции. PSI = 0.21 (на границе порога). Распределение целевого score незначительно сместилось влево (–0.04 в среднем). Тест выдал warning, но не critical.',
-      rca_results: 'Слабый глобальный сдвиг. RCA-агент: low confidence (0.41). Может быть шумом или ранним сигналом. Рекомендация: дождаться накопления статистики в течение ещё одной недели.',
       is_anomaly: '', severity: '', comments: ''
     },
     {
@@ -4200,9 +2883,8 @@ function loadDemoData() {
 
   syncMetadataDisplay();
   document.getElementById('general_comment').value = state.general_comment;
-  renderTimeline();
   renderAnomalies();
-  showToast('Загружены демо-данные: 10 аномалий за 7 дней', 'success');
+  showToast('Загружены демо-данные: 6 аномалий', 'success');
 }
 </script>
 

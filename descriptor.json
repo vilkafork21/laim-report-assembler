@@ -2,67 +2,17 @@
   "id": "3f6817ec-1a8a-4dfc-aed6-2ed0ecb0e34a",
   "name": "LAIM report assembler",
   "description": "Сборка готового HTML-отчёта обратной связи LAIM (laim_feedback_template)",
-  "fullDescription": "Принимает единый контракт monitoring-result/v2 из laim-agg (итоговый цвет, точность автоассессора, laim-assessment-result.v1), all_results каждого из четырёх тестов отдельными портами и записи детектора аномалий, собирает состояние отчёта (metadata, timeline, km_dynamics, anomalies) и встраивает его в HTML-шаблон обратной связи Владельца. Машинные доказательства сохраняются в metadata.monitoring_evidence. Единственный выход — готовый HTML для передачи в Data Saver.",
+  "fullDescription": "Принимает записи детектора аномалий (JSON-строка {\"anomalies\":[...]} из ARS test_anomalies) и опциональные метаданные пилота, собирает состояние отчёта (metadata, anomalies) и встраивает его в HTML-шаблон обратной связи Владельца. Единственный выход — готовый HTML для передачи в Data Saver.",
   "ports": [
     {
-      "name": "aggregator_result",
-      "label": "aggregator_result",
+      "name": "anomalies",
+      "label": "anomalies",
       "in": true,
       "type": "default",
       "shape": "shape_model",
       "required": true,
-      "description": "laim-agg.all_results по контракту monitoring-result/v2: итоговый цвет, assessor_accuracy и assessment_result",
+      "description": "Записи детектора аномалий: JSON-строка {\"anomalies\":[...]}, объект с этим ключом или готовый список",
       "order": 1
-    },
-    {
-      "name": "km_test_result",
-      "label": "km_test_result",
-      "in": true,
-      "type": "default",
-      "shape": "shape_model",
-      "required": true,
-      "description": "all_results теста laim-km-dynamic-test (km_test): карточка теста и данные km_dynamics",
-      "order": 2
-    },
-    {
-      "name": "local_drift_result",
-      "label": "local_drift_result",
-      "in": true,
-      "type": "default",
-      "shape": "shape_model",
-      "required": true,
-      "description": "all_results теста laim-local-drift-test (local_drift)",
-      "order": 3
-    },
-    {
-      "name": "global_drift_result",
-      "label": "global_drift_result",
-      "in": true,
-      "type": "default",
-      "shape": "shape_model",
-      "required": true,
-      "description": "all_results теста laim-global-drift-test (global_drift)",
-      "order": 4
-    },
-    {
-      "name": "oos_oot_result",
-      "label": "oos_oot_result",
-      "in": true,
-      "type": "default",
-      "shape": "shape_model",
-      "required": true,
-      "description": "all_results теста laim-oos-oot-test (oos_oot)",
-      "order": 5
-    },
-    {
-      "name": "assessor_accuracy",
-      "label": "assessor_accuracy",
-      "in": true,
-      "type": "default",
-      "shape": "shape_model",
-      "required": false,
-      "description": "Точность автоассессора (acc_auto из laim-asessor-agent); если порт не подключён, берётся из aggregator_result",
-      "order": 6
     },
     {
       "name": "metadata",
@@ -71,18 +21,8 @@
       "type": "default",
       "shape": "shape_model",
       "required": false,
-      "description": "Метаданные агента и периода из prevalidation-context",
-      "order": 7
-    },
-    {
-      "name": "detector_anomalies",
-      "label": "detector_anomalies",
-      "in": true,
-      "type": "default",
-      "shape": "shape_model",
-      "required": false,
-      "description": "Прямой вход для ARS test_anomalies: JSON-строка {\"anomalies\":[...]}. Если порт не подключён, в отчёт попадают только карточки четырёх тестов",
-      "order": 8
+      "description": "Метаданные агента и периода из prevalidation-context; если порт не подключён, шапка отчёта остаётся пустой",
+      "order": 2
     },
     {
       "name": "report_html",
@@ -91,7 +31,7 @@
       "type": "default",
       "shape": "shape_model",
       "description": "Готовый HTML отчёта обратной связи со встроенным состоянием — подключается к Data Saver",
-      "order": 9
+      "order": 3
     }
   ],
   "script": {
