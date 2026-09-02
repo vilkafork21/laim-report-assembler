@@ -205,8 +205,6 @@ tests/test_report_assembler.py  10 тестов: формы входов, мап
 CI (`.github/workflows/ci.yml`, Python 3.12): `ruff check .` и
 `python -m pytest -q` (10 тестов). ZIP — `descriptor.json`, `requirements.txt`
 и три `sourceFiles` с коммита ветки `dev`; тот же коммит переносится снимком в
-`laim/monitoring/laim-report-assembler` с обновлением строки `MANIFEST.md`.
-
 ## Глоссарий
 
 - **Отчёт обратной связи** — HTML `laim_feedback_template.html` с карточками
