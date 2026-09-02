@@ -14,6 +14,8 @@ from math import isfinite
 from numbers import Integral, Real
 from typing import Any
 
+logger = logging.getLogger(__name__)
+
 
 _ANOMALY_SCHEMA = [
     "trace_id", "starttime", "endtime", "anomaly_type", "confidence",
@@ -152,7 +154,7 @@ def _normalize_detector_confidence(value: Any) -> int | float | str:
     if value in (None, ""):
         return ""
     if isinstance(value, bool) or not isinstance(value, Real):
-        logging.warning(
+        logger.warning(
             "report-assembler: confidence детектора не число (%r) — в отчёте "
             "будет пусто", value,
         )
@@ -160,7 +162,7 @@ def _normalize_detector_confidence(value: Any) -> int | float | str:
 
     numeric = float(value)
     if not isfinite(numeric) or not 0 <= numeric <= 100:
-        logging.warning(
+        logger.warning(
             "report-assembler: confidence детектора вне 0..100 (%r) — в отчёте "
             "будет пусто", value,
         )
