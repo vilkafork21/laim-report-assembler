@@ -1,9 +1,10 @@
 # laim-report-assembler
 
 Замыкающая нода детекторной линии LAIM. Принимает **записи детектора аномалий**
-(`test_anomalies` ноды `laim-andes-sds`) и **метаданные пилота**, а отдаёт один
-готовый HTML — отчёт обратной связи Владельца агента со встроенным состоянием,
-который передаётся в Data Saver и открывается уже заполненным.
+(`test_anomalies` ноды `laim-andes-sds`), **метаданные пилота** и **итог
+итерации автомониторинга** (`monitoring-result/v3` ноды `laim-agg`), а отдаёт
+один готовый HTML — отчёт обратной связи Владельца агента со встроенным
+состоянием, который передаётся в Data Saver и открывается уже заполненным.
 
 ## Зачем нода нужна
 
@@ -20,16 +21,16 @@ JSON, не тот тип, мусорные записи) пропускаетс�
 ## Место в контуре
 
 ```text
-laim-andes-sds (INFERENCE) ── test_anomalies ──► anomalies ──┐
-                                                             ├─ laim-report-assembler ──► report_html ──► Data Saver
-метаданные пилота (источник в wiring не задан) ──► metadata ──┘
+laim-andes-sds (INFERENCE) ── test_anomalies ──► anomalies ─────────┐
+метаданные пилота (источник в wiring не задан) ──► metadata ────────┼─ laim-report-assembler ──► report_html ──► Data Saver
+laim-agg ── all_results (monitoring-result/v3) ──► monitoring_result ┘
 ```
 
-В `monitoring/shared/port_wiring.json` (`laim-sberds-wiring.v7`) нода числится
-в списке нод, но **соединений не имеет**: `anomalies`, `metadata` и
-`report_html` внутри мониторингового контура не подключены. Аномалии приходят
-из детекторной линии; `metadata` в `descriptor.json` описан как выход
-prevalidation-context, но такого поставщика в wiring нет.
+В `monitoring/shared/port_wiring.json` (`laim-sberds-wiring.v9`) единственное
+соединение ноды в мониторинговом контуре — `laim-agg.all_results →
+monitoring_result`. Аномалии приходят из детекторной линии; `metadata` в
+`descriptor.json` описан как выход prevalidation-context, но такого поставщика
+в wiring нет.
 
 ## Порты и настройки
 
@@ -39,6 +40,7 @@ prevalidation-context, но такого поставщика в wiring нет.
 |---|---|---|
 | `anomalies` | да | JSON-строка `{"anomalies": [...]}` (контракт `test_anomalies` детектора); также принимаются `bytes`/`bytearray` в UTF-8, `dict` с ключом `anomalies` и готовый `list` записей |
 | `metadata` | нет | `dict` (или его JSON-строка/`bytes`) с ключами `agent_id`, `agent_name`, `agent_version`, `business_line`, `owner_name`, `report_date`, `period_from`, `period_to`, `pilot_stage`; лишние ключи проходят в состояние как есть |
+| `monitoring_result` | нет | `all_results` ноды `laim-agg` — `dict` (или JSON-строка/`bytes`) со `schema_version` `monitoring-result/v3`: `color`, `quality_status`, `reasons`, `registry`, `provenance`; другая схема или не объект — раздел автомониторинга в отчёте отсутствует |
 
 ### Выходы
 
@@ -53,26 +55,37 @@ prevalidation-context, но такого поставщика в wiring нет.
 ## Как проходит прогон
 
 ```text
-1. Разбор anomalies   строка/bytes → JSON → список; не-объекты отброшены
-2. Разбор metadata    строка/bytes → JSON → dict; иначе None
-3. Сборка состояния   дефолты метаданных, нормализация каждой записи, general_comment
-4. Встраивание        шаблон с диска → проверка контейнера → JSON в <script> → report_html
+1. Разбор anomalies         строка/bytes → JSON → список; не-объекты отброшены
+2. Разбор metadata          строка/bytes → JSON → dict; иначе None
+3. Разбор monitoring_result строка/bytes → JSON → dict со schema_version v3; иначе None
+4. Сборка состояния         дефолты метаданных, нормализация каждой записи, general_comment
+5. Встраивание              шаблон с диска → проверка контейнера и маркера →
+                            раздел автомониторинга на место маркера → JSON в <script> → report_html
 ```
 
-**1–2. Разбор входов** (`_as_anomaly_list`, `_as_metadata` в `main.py`).
-`None` — пустой результат без предупреждения; невалидный JSON, не-список в
-`anomalies`, не-объект в `metadata` — warning и пустой результат; элементы
+**1–3. Разбор входов** (`_as_anomaly_list`, `_as_metadata`, `_as_monitoring_result`
+в `main.py`). `None` — пустой результат без предупреждения; невалидный JSON,
+не-список в `anomalies`, не-объект в `metadata`/`monitoring_result`, чужая
+`schema_version` в `monitoring_result` — warning и пустой результат; элементы
 списка не-`dict` отбрасываются со счётчиком.
 
-**3. Сборка состояния** (`assemble_laim_report` в `_assemble_core.py`).
+**4. Сборка состояния** (`assemble_laim_report` в `_assemble_core.py`).
 Дефолты метаданных перекрываются пришедшими: без порта `metadata` в отчёте
 пустые `agent_id`, `agent_name`, `agent_version`, `business_line`, `owner_name`,
 `report_date` = `period_from` = `period_to` = дата сборки, `pilot_stage` =
 `Pilot`. Записи приводятся к схеме шаблона (см. «Форматы выхода»); без записей
 `general_comment` = «Детектор не выявил аномалий за период.», иначе пусто.
 
-**4. Встраивание** (`_fill_template`). Шаблон читается по `_TEMPLATE_PATH`
-рядом с `main.py`. Состояние сериализуется `json.dumps(ensure_ascii=False,
+**5. Встраивание** (`_fill_template`). Шаблон читается по `_TEMPLATE_PATH`
+рядом с `main.py`. Раздел «Итог автомониторинга за период»
+(`render_monitoring_section` в `_monitoring_section.py`) — статичный HTML в
+стиле секций шаблона: светофор итерации и статус оценки качества, список
+оснований, реестр тестов методики (таблица 15: тест, роль
+светофорный/информативный, результат, причина) и происхождение выборки и
+данных; все значения экранируются `html.escape`. Он подставляется на место
+маркера `<!-- laim-monitoring-section -->` перед разделом 02 (без входа —
+маркер убирается, раздела нет) и живёт вне JS-состояния: при сохранении
+Владельцем остаётся в HTML как часть страницы. Состояние сериализуется `json.dumps(ensure_ascii=False,
 default=str)`, `<` заменяется на `\u003c` (как в `saveHtml` самого шаблона),
 чтобы `</script>` внутри данных не оборвал контейнер; `JSON.parse` возвращает
 `<`. Замена — одна, только для пустого контейнера
@@ -88,10 +101,11 @@ WARNING anomalies: невалидный JSON — записи пропущены
 WARNING anomalies: пропущено 2 записей не-объектов
 WARNING metadata: невалидный JSON — шапка отчёта останется пустой
 WARNING metadata: ожидался объект, получен list — шапка отчёта останется пустой
+WARNING monitoring_result: schema_version='monitoring-result/v2', ожидается monitoring-result/v3 — раздел автомониторинга пропущен
 WARNING report-assembler: confidence детектора не число ('нет') — в отчёте будет пусто
 ```
 
-Префиксы `anomalies:`/`metadata:` — логгер `__name__` в `main.py`;
+Префиксы `anomalies:`/`metadata:`/`monitoring_result:` — логгер `__name__` в `main.py`;
 `report-assembler:` — `_assemble_core.py` пишет в корневой логгер.
 
 ## Форматы выхода и контракты
@@ -143,12 +157,13 @@ WARNING report-assembler: confidence детектора не число ('нет
 
 ## Падение против деградации
 
-Единственное падение ноды — отсутствие контейнера в шаблоне; `reason_code`
-не применимо, исключение стандартное:
+Падение ноды — только повреждённый шаблон; `reason_code` не применимо,
+исключение стандартное:
 
 | Причина | Исключение |
 |---|---|
 | В `laim_feedback_template.html` нет строки `<script id="laim-embedded-state" type="application/json"></script>` | `ValueError("laim_feedback_template.html: контейнер laim-embedded-state не найден")` |
+| В `laim_feedback_template.html` нет маркера `<!-- laim-monitoring-section -->` | `ValueError("laim_feedback_template.html: маркер laim-monitoring-section не найден")` |
 
 Всё остальное — деградация с `logger.warning`, HTML отдаётся всегда:
 
@@ -157,6 +172,7 @@ WARNING report-assembler: confidence детектора не число ('нет
 | `anomalies` — невалидный JSON или не список/не объект с `anomalies` | `anomalies: []`, `general_comment` «Детектор не выявил аномалий за период.» |
 | Элемент списка не `dict` | запись отброшена, warning со счётчиком |
 | `metadata` — невалидный JSON или не объект | шапка с дефолтами (пустой `agent_id`, период = дата сборки) |
+| `monitoring_result` — невалидный JSON, не объект или `schema_version` не `monitoring-result/v3` | раздела автомониторинга нет, warning `monitoring_result:` |
 | `confidence` не число или вне `0..100` | пустая строка, warning `report-assembler:` |
 
 ## Внешние сервисы
@@ -166,19 +182,20 @@ WARNING report-assembler: confidence детектора не число ('нет
 ## Наблюдаемость
 
 Порта журнала нет: только лог платформы и сам HTML. Триаж на сотне прогонов —
-поиск в логе префиксов `anomalies:`, `metadata:`, `report-assembler:`; прогон
+поиск в логе префиксов `anomalies:`, `metadata:`, `monitoring_result:`, `report-assembler:`; прогон
 без предупреждений разобрал входы целиком. Пустой `anomalies` в HTML неотличим
 от честно пустого выхода детектора — различает их только лог.
 
 ## Карта кода
 
 ```text
-descriptor.json              порты anomalies/metadata/report_html, py312-simple, sourceFiles
-main.py                      разбор входов best-effort, встраивание состояния в шаблон, main()
+descriptor.json              порты anomalies/metadata/monitoring_result/report_html, py312-simple, sourceFiles
+main.py                      разбор входов best-effort, встраивание состояния и раздела автомониторинга в шаблон, main()
 _assemble_core.py            схема записи, словари типов и маппинг, confidence, сплющивание текста
-laim_feedback_template.html  шаблон обратной связи Владельца с пустым контейнером laim-embedded-state
+_monitoring_section.py       HTML-раздел «Итог автомониторинга» из monitoring-result/v3 (светофор, основания, реестр)
+laim_feedback_template.html  шаблон обратной связи Владельца: пустой контейнер laim-embedded-state, маркер laim-monitoring-section
 requirements.txt             пустой — только stdlib
-tests/test_report_assembler.py  10 тестов: формы входов, маппинг типов, confidence, экранирование, мусор
+tests/test_report_assembler.py  16 тестов: формы входов, маппинг типов, confidence, экранирование, мусор, раздел автомониторинга
 ```
 
 ## Что делать, если
@@ -190,21 +207,25 @@ tests/test_report_assembler.py  10 тестов: формы входов, мап
   подключён или пришёл не объект (`metadata:` в логе); это штатное поведение.
 - **Все типы показаны как «Аномалия без классификации»** — детектор отдаёт коды
   вне `_DETECTOR_TYPE_MAP` или пустой `anomaly_type`; сверить словарь с детектором.
-- **Нода упала с `ValueError` про `laim-embedded-state`** — в ZIP попал шаблон
-  с заполненным или удалённым контейнером; пересобрать из `dev`.
+- **Нода упала с `ValueError` про `laim-embedded-state` или `laim-monitoring-section`** —
+  в ZIP попал шаблон с заполненным или удалённым контейнером либо без маркера;
+  пересобрать из `dev`.
+- **В отчёте нет раздела «Итог автомониторинга»** — порт `monitoring_result` не
+  подключён к `laim-agg.all_results` или пришёл не `monitoring-result/v3`
+  (`monitoring_result:` в логе).
 
 ## Деплой
 
-Нода самодостаточна: импорт только `_assemble_core` из того же каталога.
-База — `py312-simple`; точка входа — функция `main` в `main.py`;
-`script.runConfiguration.sourceFiles` = `main.py`, `_assemble_core.py`,
-`laim_feedback_template.html`. Шаблон грузится по `_TEMPLATE_PATH` относительно
+Нода самодостаточна: импорт только `_assemble_core` и `_monitoring_section`
+из того же каталога. База — `py312-simple`; точка входа — функция `main` в
+`main.py`; `script.runConfiguration.sourceFiles` = `main.py`,
+`_assemble_core.py`, `_monitoring_section.py`, `laim_feedback_template.html`. Шаблон грузится по `_TEMPLATE_PATH` относительно
 `main.py`, поэтому обязан лежать в том же каталоге ZIP. `requirements.txt`
 пуст — зависимостей нет. Теста соответствия `sourceFiles` диску в `tests/` нет.
 
 CI (`.github/workflows/ci.yml`, Python 3.12): `ruff check .` и
-`python -m pytest -q` (10 тестов). ZIP — `descriptor.json`, `requirements.txt`
-и три `sourceFiles` с коммита ветки `dev`; тот же коммит переносится снимком в
+`python -m pytest -q` (16 тестов). ZIP — `descriptor.json`, `requirements.txt`
+и четыре `sourceFiles` с коммита ветки `dev`; тот же коммит переносится снимком в
 ## Глоссарий
 
 - **Отчёт обратной связи** — HTML `laim_feedback_template.html` с карточками
@@ -216,3 +237,6 @@ CI (`.github/workflows/ci.yml`, Python 3.12): `ruff check .` и
   JSON `{"anomalies": [...]}`; контракт входа `anomalies` этой ноды.
 - **RCA** — анализ первопричины (`rca_results`) от LLM-узла, текст или структура.
 - **Data Saver** — нода платформы, сохраняющая `report_html` как файл.
+- **`monitoring-result/v3`** — выход `all_results` ноды `laim-agg`: итог
+  итерации по таблице 15 методики (`color`, `quality_status`, `reasons`,
+  `registry`, `provenance`); контракт входа `monitoring_result` этой ноды.

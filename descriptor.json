@@ -25,13 +25,23 @@
       "order": 2
     },
     {
+      "name": "monitoring_result",
+      "label": "monitoring_result",
+      "in": true,
+      "type": "default",
+      "shape": "shape_model",
+      "required": false,
+      "description": "Итог итерации автомониторинга monitoring-result/v3 (all_results ноды laim-agg); если порт не подключён, раздел автомониторинга в отчёте отсутствует",
+      "order": 3
+    },
+    {
       "name": "report_html",
       "label": "report_html",
       "in": false,
       "type": "default",
       "shape": "shape_model",
       "description": "Готовый HTML отчёта обратной связи со встроенным состоянием — подключается к Data Saver",
-      "order": 3
+      "order": 4
     }
   ],
   "script": {
@@ -45,6 +55,7 @@
       "sourceFiles": [
         "main.py",
         "_assemble_core.py",
+        "_monitoring_section.py",
         "laim_feedback_template.html"
       ],
       "functionName": "main",

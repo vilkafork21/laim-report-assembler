@@ -146,3 +146,98 @@ def test_non_object_records_are_skipped():
 
     state = _embedded_state(result["report_html"])
     assert len(state["anomalies"]) == 1
+
+
+SECTION_TITLE = "Итог автомониторинга за период"
+
+
+def _monitoring_result(**overrides):
+    result = {
+        "schema_version": "monitoring-result/v3",
+        "color": "amber",
+        "quality_status": "assessed",
+        "reasons": [
+            "data_readiness: ограничение данных (DQ warnings K1)",
+            "автоассессор допущен с ограничением: few_critical_units",
+        ],
+        "registry": {
+            "data_readiness": {
+                "expected": True, "received": True, "informative": False,
+                "status": "computed", "light": "amber", "reason": "DQ warnings K1",
+            },
+            "assessor": {
+                "expected": True, "received": True, "informative": False,
+                "status": "computed", "light": "amber", "reason": "few_critical_units",
+            },
+            "km_test": {
+                "expected": True, "received": True, "informative": False,
+                "status": "computed", "light": "green", "reason": None,
+            },
+            "global_drift": {
+                "expected": True, "received": True, "informative": True,
+                "status": "not_assessed", "light": None, "reason": "no_labeled_history",
+            },
+            "oos_oot": {
+                "expected": True, "received": False, "informative": True,
+                "status": None, "light": None, "reason": "ожидаемый результат отсутствует",
+            },
+        },
+        "provenance": {
+            "sample": {"unit": "session", "population_units": 283, "sampled_units": 94},
+            "data_readiness": {"state": "limited", "reason": "DQ warnings K1"},
+        },
+    }
+    result.update(overrides)
+    return result
+
+
+def test_monitoring_section_renders_light_status_reasons_and_registry():
+    html = node.main(anomalies=[], monitoring_result=_monitoring_result())["report_html"]
+
+    assert node._SECTION_MARKER not in html
+    section = html[html.index(SECTION_TITLE):html.index("Общая оценка работы агента")]
+    assert "жёлтый" in section and "качество оценено" in section
+    assert "ограничение данных (DQ warnings K1)" in section
+    assert "few_critical_units" in section
+    for title in ("6.3.2", "6.3.3", "6.3.4", "6.3.8", "6.3.6"):
+        assert title in section
+    assert "не получен" in section          # oos_oot отсутствует
+    assert "не оценено" in section          # global_drift not_assessed
+    assert "информативный" in section       # пометка информативных тестов
+    assert "94" in section and "283" in section and "session" in section
+    assert _embedded_state(html)["anomalies"] == []
+
+
+def test_monitoring_section_absent_without_input():
+    html = node.main(anomalies=[])["report_html"]
+    assert SECTION_TITLE not in html
+    assert node._SECTION_MARKER not in html
+
+
+def test_monitoring_section_escapes_markup():
+    result = _monitoring_result(reasons=["km_test: <script>alert(1)</script>"])
+    html = node.main(anomalies=[], monitoring_result=result)["report_html"]
+    assert "<script>alert(1)</script>" not in html
+    assert "&lt;script&gt;alert(1)&lt;/script&gt;" in html
+
+
+def test_unsupported_monitoring_result_is_skipped(caplog):
+    for value in ("{bad json", {"schema_version": "monitoring-result/v2", "color": "green"}, 42):
+        html = node.main(anomalies=[], monitoring_result=value)["report_html"]
+        assert SECTION_TITLE not in html
+    assert sum("monitoring_result" in r.message for r in caplog.records) == 3
+
+
+def test_monitoring_result_accepts_json_string():
+    payload = json.dumps(_monitoring_result(color="red", quality_status="assessed"))
+    html = node.main(anomalies=[], monitoring_result=payload)["report_html"]
+    assert "красный" in html[html.index(SECTION_TITLE):]
+
+
+def test_descriptor_declares_monitoring_result_port():
+    descriptor = json.loads((NODE / "descriptor.json").read_text(encoding="utf-8"))
+    ports = {port["name"]: port for port in descriptor["ports"]}
+    assert ports["monitoring_result"]["in"] is True
+    assert ports["monitoring_result"]["required"] is False
+    assert "monitoring-result/v3" in ports["monitoring_result"]["description"]
+    assert "_monitoring_section.py" in descriptor["script"]["runConfiguration"]["sourceFiles"]
